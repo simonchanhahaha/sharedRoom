@@ -31,8 +31,8 @@
             <!-- Right Side Of Navbar -->
             <ul class="nav navbar-nav navbar-right">
 
-                <li><a href="auth/showlogin/" data-pjax>登录</a></li>
-                <li><a href="auth/showregister/" data-pjax>注册</a></li>
+                <li><a href="/auth/showlogin/" data-pjax>登录</a></li>
+                <li><a href="/auth/showregister/" data-pjax>注册</a></li>
 
             </ul>
         </div>
@@ -40,12 +40,7 @@
 </nav>
 
 <div class="container">
-    <ul class="nav nav-tabs">
-        <li role="presentation" class="active"><a href="#">Home</a></li>
-        <li role="presentation"><a href="#">Profile</a></li>
-        <li role="presentation"><a href="#">Messages</a></li>
-    </ul>
-    <hr>
+
     {% block content %}
     {% endblock %}
 </div>
