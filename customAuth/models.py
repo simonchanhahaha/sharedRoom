@@ -13,4 +13,9 @@ class Users_profile(models.Model):
     gender = models.BooleanField(default=0, null=False, blank=False)
     phone = models.CharField(max_length=11, null=False, blank=False)
     wechat = models.CharField(max_length=20, null=True, blank=True)
-    location = models.ForeignKey(Location)
+    location = models.ForeignKey(Location,db_column='location_id')
+
+class Avatar(models.Model):
+    user_id=models.OneToOneField(User,db_column='user_id')
+    path=models.ImageField(upload_to='avatar')
+    version = models.SmallIntegerField(default=1)

@@ -30,9 +30,14 @@
 
             <!-- Right Side Of Navbar -->
             <ul class="nav navbar-nav navbar-right">
+                {% if request.user.is_authenticated %}
+                    <li><a href="/auth/showprofile/{{ user.id }}">{{ user.username }}</a></li>
+                    <li><a href="/auth/logout/">退出</a></li>
+                {% else %}
+                    <li><a href="/auth/showlogin/" data-pjax>登录</a></li>
+                    <li><a href="/auth/showregister/" data-pjax>注册</a></li>
 
-                <li><a href="/auth/showlogin/" data-pjax>登录</a></li>
-                <li><a href="/auth/showregister/" data-pjax>注册</a></li>
+                {% endif %}
 
             </ul>
         </div>

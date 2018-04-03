@@ -13,6 +13,15 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
+            name='Avatar',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', primary_key=True, serialize=False, auto_created=True)),
+                ('path', models.ImageField(upload_to='avatar')),
+                ('version', models.SmallIntegerField(default=1)),
+                ('user_id', models.OneToOneField(db_column='user_id', to=settings.AUTH_USER_MODEL)),
+            ],
+        ),
+        migrations.CreateModel(
             name='Location',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', primary_key=True, serialize=False, auto_created=True)),
@@ -27,7 +36,7 @@ class Migration(migrations.Migration):
                 ('gender', models.BooleanField(default=0)),
                 ('phone', models.CharField(max_length=11)),
                 ('wechat', models.CharField(max_length=20, blank=True, null=True)),
-                ('location', models.ForeignKey(to='customAuth.Location')),
+                ('location', models.ForeignKey(db_column='location_id', to='customAuth.Location')),
                 ('user_id', models.OneToOneField(db_column='user_id', to=settings.AUTH_USER_MODEL)),
             ],
         ),
