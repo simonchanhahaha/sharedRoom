@@ -118,7 +118,13 @@ def setProfile(request):
     return redirect('/')
 
 def showProfile(request, user_id):
-    pass
+    user=User.objects.get(id=user_id)
+    data={
+        'title':user.username,
+        'status':"success",
+        'user':user
+    }
+    return render(request,'authTemplate/show_profile.html',context=data)
 
 
 def setAvatar(avatar,user):
