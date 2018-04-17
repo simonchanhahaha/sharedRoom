@@ -1,0 +1,136 @@
+{% extends 'app.html' %}
+{% block content %}
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="panel panel-default">
+                <div class="panel-heading">填写用户信息</div>
+                <div class="panel-body">
+                    <form class="form-horizontal" role="form" method="POST" action="/apartment/setrent/" enctype="multipart/form-data"
+                          accept-charset="utf-8">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">小区</label>
+                            <div class="col-md-6">
+{#                                <select class="form-control" name="garden_id">#}
+{#                                    <option contentEditable="true">#}
+{#                                    </option>#}
+{#                                </select>#}
+                                <input type="text" class="form-control" name="garden_name">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">总面积</label>
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="size" aria-describedby="basic-addon2">
+                                    <span class="input-group-addon" id="basic-addon2">平米</span>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">户型</label>
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="room" aria-describedby="basic-addon2">
+                                    <span class="input-group-addon" id="basic-addon2">房</span>
+                                    <input type="text" class="form-control" name="hall" aria-describedby="basic-addon2">
+                                    <span class="input-group-addon" id="basic-addon2">厅</span>
+                                    <input type="text" class="form-control" name="toilet"
+                                           aria-describedby="basic-addon2">
+                                    <span class="input-group-addon" id="basic-addon2">卫</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">朝向</label>
+                            <div class="col-md-6">
+                                <select class="form-control" name="forward">
+                                    <option value="1">东</option>
+                                    <option value="2">南</option>
+                                    <option value="3">西</option>
+                                    <option value="4">北</option>
+                                    <option value="5">东北</option>
+                                    <option value="6">西北</option>
+                                    <option value="7">东南</option>
+                                    <option value="8">西南</option>
+                                    <option value="9">不知道房屋朝向</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">楼层</label>
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" name="floor">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="col-md-4 control-label">家具</label>
+                            <div class="col-md-6">
+                                <label class="radio-inline">
+                                    <input type="radio"  name="furniture" value="0"> 无
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio"  name="furniture" value="1"> 有
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="" class="col-md-4 control-label">装修</label>
+                            <div class="col-md-6">
+                                <select class="form-control" name="decoration_type">
+                                    <option value="1">毛坯</option>
+                                    <option value="2">简单装修</option>
+                                    <option value="3">中等装修</option>
+                                    <option value="4">精装修</option>
+                                    <option value="5">豪华装修</option>
+                                    <option value="6">其他</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">租金</label>
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="price"
+                                           aria-describedby="basic-addon2">
+                                    <span class="input-group-addon" id="basic-addon2">元/月</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="col-md-4 control-label">付款类型</label>
+                            <div class="col-md-6">
+                                <select class="form-control" name="payment_type">
+                                    <option value="1">押一付一</option>
+                                    <option value="2">押二付一</option>
+                                    <option value="3">押一付三</option>
+                                    <option value="4">半年付</option>
+                                    <option value="5">年付</option>
+                                    <option value="6">其他</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">图片</label>
+                            <div class="col-md-6">
+                                <input type="file" class="file-upload" name="img" multiple="multiple">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-6 col-md-offset-4">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fa fa-btn fa-user"></i>提交
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

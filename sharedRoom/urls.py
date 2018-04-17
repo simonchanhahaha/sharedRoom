@@ -19,5 +19,6 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^auth/',include('customAuth.urls')),
+    url(r'^apartment/',include('apartment.urls')),
     url(r'^$','customAuth.views.showIndex')
 ]

@@ -110,34 +110,40 @@ def setProfile(request):
     profile.location_id = location
     profile.save()
 
-    # profile.location_id = location
-    avatar = request.FILES['avatar']
-    if avatar is not None:
-        setAvatar(avatar,user)
-
+    # '''
+    # set avatar
+    # '''
+    # avatar = request.FILES['avatar']
+    # if avatar is not None:
+    #     setAvatar(user, avatar)
+    # else:
+    #     setAvatar(user)
     return redirect('/')
 
+
 def showProfile(request, user_id):
-    user=User.objects.get(id=user_id)
-    data={
-        'title':user.username,
-        'status':"success",
-        'user':user
+    user = User.objects.get(id=user_id)
+    data = {
+        'title': user.username,
+        'status': "success",
+        'user': user
     }
-    return render(request,'authTemplate/show_profile.html',context=data)
+    return render(request, 'authTemplate/show_profile.html', context=data)
 
 
-def setAvatar(avatar,user):
+def setAvatar(user, avatar=None):
     avatar_obj = Avatar()
     avatar_name = str(user.id) + '.' + avatar.name.split('.')[-1]
 
-    path = 'avatar/' + str(user.id) + '/'
-
-    if not os.path.exists(path):
-        os.mkdir(path)
-    with open(path + avatar_name, 'wb+') as pic:
-        for chunk in avatar.chunks():
-            pic.write(chunk)
+    if avatar is None:
+        path = './static/img/avatar/default.png'
+    else:
+        path = './static/img/avatar/' + str(user.id) + '/'
+        if not os.path.exists(path):
+            os.mkdir(path)
+        with open(path + avatar_name, 'wb+') as pic:
+            for chunk in avatar.chunks():
+                pic.write(chunk)
 
     avatar_obj.user_id = user
     avatar_obj.path = path
