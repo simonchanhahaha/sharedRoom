@@ -20,5 +20,7 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^auth/',include('customAuth.urls')),
     url(r'^apartment/',include('apartment.urls')),
+    url(r'^city/(\d+)/','apartment.views.city'),
+    url(r'(\d+)/(\d+)/$','apartment.views.show_apartment'),
     url(r'^$','customAuth.views.showIndex')
 ]

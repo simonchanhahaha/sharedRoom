@@ -17,5 +17,6 @@ class Users_profile(models.Model):
 
 class Avatar(models.Model):
     user_id=models.OneToOneField(User,db_column='user_id')
-    path=models.ImageField(upload_to='avatar')
+    path= models.CharField(max_length=40)
+    img = models.ImageField(upload_to='avatar')
     version = models.SmallIntegerField(default=1)

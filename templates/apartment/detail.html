@@ -39,9 +39,9 @@
     <div class="details-head">
         <!-- title -->
         <div class="clearfix">
-            <h2>翠拥华庭二期 视野开阔，采光好，安静舒适。</h2>
+            <h2>{{ apartment_name }}</h2>
             <p class="clearfix">
-                <span>洪湖公园，2000米</span>
+                <span><h3>{{ garden_name }}</h3></span>
             </p>
         </div>
 
@@ -54,10 +54,10 @@
         </div>
         <div class="col-md-5">
             <div class="clearfix">
-                <p class=""><span>215</span>万</p>
+                <p class=""><h2 style="color: red;">{{ price }}元</h2></p>
                 <div class="col-md-12">
                     <p class="clearfix">
-                        <span class="average-price fl">58092元/平米</span>
+                        <span class="average-price fl"> {{ price }}  元/平米</span>
                     </p>
                     <p class="clearfix">
                         <span>首付 </span>
@@ -72,37 +72,29 @@
                         <li class="clearfix">
                             <span class="">小区名称</span>
                             <p><a href="#"
-                                  target="_blank">翠拥华庭二期</a></p>
+                                  target="_blank">{{ garden_name }}</a></p>
                         </li>
 
 
                         <li class="clearfix">
-                            <span class="">看房时间</span>
-                            <p class="fl">随时可预约</p>
-                            <p class=""><a href="javascript:;">预约看房</a></p>
+
+                            <p class="book_room"><a href="javascript:;">预约看房</a></p>
                         </li>
 
 
-                        <li class="clearfix">
-                            <span class="">对口学校</span>
-                            <p class="clearfix">
-                                <a target="_blank" href="#">深圳市锦田小学</a>
-                            </p>
-                        </li>
 
 
                         <li class="clearfix">
                             <span class="">所在区域</span>
                             <div class="clearfix">
                                 <p>
-                                    [<a target="_blank" href="#">罗湖</a>
-                                    <a target="_blank" href="#">翠竹</a>]
-
-                                    <a href="javascript:;">
-                                        <span>近3号线(龙岗线)翠竹站</span>
-                                    </a>
+                                    [<a target="_blank" href="#">{{ location_pid }}</a>
+                                    <a target="_blank" href="#">{{ location_id }}</a>]
                                 </p>
                             </div>
+                        </li>
+                        <li class="clearfix">
+                            <div class="btn btn-primary">预定</div>
                         </li>
                     </ul>
                 </div>
@@ -123,60 +115,40 @@
                         <tr>
                             <th>房源信息</th>
                             <th>房屋户型</th>
-                            <td>1室1厅1厨1卫</td>
+                            <td>{{ room }} 室 {{ hall }} 厅 {{ bathroom }}卫</td>
                             <th>所在楼层</th>
-                            <td>低层/27层</td>
+                            <td>{{ floor }}</td>
                         </tr>
                         <tr>
                             <td></td>
                             <th>建筑面积</th>
-                            <td>37.01㎡</td>
-                            <th>户型结构</th>
-                            <td>平层</td>
+                            <td>{{ size }} ㎡</td>
+                            <th>装修情况</th>
+                            <td>{{ decoration }}</td>
                         </tr>
                         <tr>
                             <td></td>
                             <th>房屋朝向</th>
-                            <td> 北</td>
-                            <th>装修情况</th>
-                            <td>精装修</td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <th>配备电梯</th>
-                            <td>有</td>
-                            <td></td>
+                            <td>{{ forward }}</td>
+                            <th></th>
                             <td></td>
                         </tr>
-                    </table>
-                    <table class="table table-hover">
+
+{#                    </table>#}
+{#                    <table class="table table-hover">#}
                         <tr>
                             <th>交易属性</th>
-                            <th>房屋用途</th>
-                            <td>住宅</td>
+                            <th>租房类型</th>
+                            <td>{{ rent_type }}</td>
                             <th>上次交易</th>
                             <td>暂无数据</td>
                         </tr>
                         <tr>
                             <td></td>
-                            <th>房屋年限</th>
-                            <td>满两年</td>
-                            <th>建筑年代</th>
-                            <td>2004</td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <th>抵押信息</th>
-                            <td>无抵押</td>
-                            <th>房本备件</th>
-                            <td>已上传房本照片</td>
-                        </tr>
-                        <tr>
-                            <td></td>
                             <th>房源编码</th>
-                            <td>178277847927</td>
+                            <td></td>
                             <td>委托时间</td>
-                            <td>2017.12.14 - 2018.12.13</td>
+                            <td>{{ created_time }}</td>
                         </tr>
                     </table>
 
@@ -194,75 +166,35 @@
                 <div>
                     <div>
                         <ul class="list-unstyled clearfix" id="nearRooms">
-                            <li>
-                                <div class="col-md-4 col-sm-6">
-                                    <div class="thumbnail">
-                                        <a target="_blank" href="#">
-                                            <img src="../../static/img/test.jpeg">
-                                        </a>
-                                        <div class="caption">
-                                            <h4>218万</h4>
-                                            <p>
-                                                <a target="_blank" href="#">翠竹苑屋村</a>
-                                            </p>
+                            {% for apartment_list in apartment_lists %}
+                                <li>
+                                    <div class="col-md-4 col-sm-6">
+                                        <div class="thumbnail">
+                                            <a target="_blank" href="#">
+                                                <img src="../../static/img/test.jpeg">
+                                            </a>
+                                            <div class="caption">
+                                                <h4>{{ apartment_list.price }}元</h4>
+                                                <p>
+                                                    <a target="_blank" href="#">{{ apartment_list.name }}</a>
+                                                </p>
 
-                                            <p>
-                                            <span>
-                                                <em>1室1厅</em>
-                                                <em>36.97m²</em>
-                                            </span>
-                                            </p>
+                                                <p>
+                                                <span>
+                                                    <em>{{ apartment_list.room}}室{{apartment_list.hall}}厅{{apartment_list.bathroom}}卫</em>
+                                                    <em>{{ apartment_list.size }} m²</em>
+                                                </span>
+                                                </p>
+                                            </div>
                                         </div>
+
                                     </div>
+                                </li>
+                            {% endfor %}
 
-                                </div>
-                            </li>
-                            <li>
-                                <div class="col-md-4 col-sm-6">
-                                    <div class="thumbnail">
-                                        <a target="_blank" href="#">
-                                            <img src="../../static/img/test.jpeg">
-                                        </a>
-                                        <div class="caption">
-                                            <h4>218万</h4>
-                                            <p>
-                                                <a target="_blank" href="#">翠竹苑屋村</a>
-                                            </p>
 
-                                            <p>
-                                            <span>
-                                                <em>1室1厅</em>
-                                                <em>36.97m²</em>
-                                            </span>
-                                            </p>
-                                        </div>
-                                    </div>
 
-                                </div>
-                            </li>
-                            <li>
-                                <div class="col-md-4 col-sm-6">
-                                    <div class="thumbnail">
-                                        <a target="_blank" href="#">
-                                            <img src="../../static/img/test.jpeg">
-                                        </a>
-                                        <div class="caption">
-                                            <h4>218万</h4>
-                                            <p>
-                                                <a target="_blank" href="#">翠竹苑屋村</a>
-                                            </p>
 
-                                            <p>
-                                            <span>
-                                                <em>1室1厅</em>
-                                                <em>36.97m²</em>
-                                            </span>
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </li>
                         </ul>
                     </div>
                 </div>

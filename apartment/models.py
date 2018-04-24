@@ -35,6 +35,10 @@ class Apartment(models.Model):
     forward = models.CharField(max_length=10)
     user_id = models.ForeignKey(User, db_column='user_id')
     garden_id = models.ForeignKey(Garden, db_column='garden_id')
+    # subway_id = models.ForeignKey(Subway,db_column='subway_id',default='')
+    img = models.ImageField()
+    created_time = models.DateTimeField(auto_now=True)
+    is_rent = models.BooleanField(default=0)
 
 
 class Tag(models.Model):
