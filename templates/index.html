@@ -6,177 +6,50 @@
         <li role="presentation"><a href="#">Messages</a></li>
     </ul>
     <hr>
-    <div class="h5">共找到xxx套房源</div>
+    <div class="h5">共找到{{ count }}套房源</div>
     <hr>
     <ul class="list-unstyled">
+    {% for apartment in apartment_lists %}
         <li>
             <div class="row">
                 <div class="col-md-3">
                     <a href="#" class="thumbnail">
-                        <img src="/static/img/test.jpeg" alt="">
+                        <img src="/media/{{ apartment.apartmentimg_set.first.img }}" alt="{{ apartment.name }}">
                     </a>
                 </div>
                 <div class="col-md-7">
                     <div class="show-detail ">
                         <p class="house-title">
-                            <a title="信义御城 精装1房，总价低，155万诚心出售，有钥匙看房"
-                               target="_blank" href="#">信义御城
-                                精装1房，总价低，155万诚心出售，有钥匙看房</a>
+                            <a title="{{ apartment.name }}"
+                               target="_blank" href="/apartment/{{ apartment.id }}">{{ apartment.name }}</a>
                         </p>
 
                         <p class="clearfix">
                             <span class="iconfont icon-house"></span>
-                            <span>1室1厅</span>
+                            <span>{{ apartment.room }}室{{ apartment.hall }}厅{{ apartment.bathroom }}卫</span>
                             <span></span>
-                            <span>49.23平米</span>
+                            <span>{{ apartment.size }}平米</span>
                             <span></span>
-                            <span>精装修</span>
+                            <span>{{ apartment.decoration }}</span>
                             <span></span>
-                            <span>高层/32层</span>
+                            <span>{{ apartment.floor }}</span>
                             <span></span>
                             <span>东北</span>
-                            <span></span>
-                            <span>2013年建</span>
 
                         </p>
 
-                        <p class="clearfix">
-                            <span class="iconfont icon-dingwei"></span>
-                            <span class="whole-line">
-				    		<a href="#">龙岗</a>-<a
-                                    href="#">横岗二手房</a>-<a
-                                    target="_blank" href="#">信义御城 (信义御城豪园)</a>
-	    		</span>
-                        </p>
 
-
-                        <p class="clearfix">
-                            <!--学校标签-->
-                            <a href="#" target="_blank"><span>深圳市龙岗区横岗街道中心学校（小学部）</span></a>
-
-                            <span>距离3号线(龙岗线)横岗站约474米</span>
-                        </p>
                     </div>
                 </div>
                 <div class="col-md-2">
-                    <h1 style="color: red;">500W</h1>
-                    <span>58092元/平米</span>
+                    <h1 style="color: red;">{{ apartment.price }}</h1>
                 </div>
             </div>
             <hr>
         </li>
-        <li>
-            <div class="row">
-                <div class="col-md-3">
-                    <a href="#" class="thumbnail">
-                        <img src="/static/img/test.jpeg" alt="">
-                    </a>
-                </div>
-                <div class="col-md-7">
-                    <div class="show-detail ">
-                        <p class="house-title">
-                            <a title="信义御城 精装1房，总价低，155万诚心出售，有钥匙看房"
-                               target="_blank" href="#">信义御城
-                                精装1房，总价低，155万诚心出售，有钥匙看房</a>
-                        </p>
+    {% endfor %}
+    
 
-                        <p class="clearfix">
-                            <span class="iconfont icon-house"></span>
-                            <span>1室1厅</span>
-                            <span></span>
-                            <span>49.23平米</span>
-                            <span></span>
-                            <span>精装修</span>
-                            <span></span>
-                            <span>高层/32层</span>
-                            <span></span>
-                            <span>东北</span>
-                            <span></span>
-                            <span>2013年建</span>
-
-                        </p>
-
-                        <p class="clearfix">
-                            <span class="iconfont icon-dingwei"></span>
-                            <span class="whole-line">
-				    		<a href="#">龙岗</a>-<a
-                                    href="#">横岗二手房</a>-<a
-                                    target="_blank" href="#">信义御城 (信义御城豪园)</a>
-	    		</span>
-                        </p>
-
-
-                        <p class="clearfix">
-                            <!--学校标签-->
-                            <a href="#" target="_blank"><span>深圳市龙岗区横岗街道中心学校（小学部）</span></a>
-
-                            <span>距离3号线(龙岗线)横岗站约474米</span>
-                        </p>
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <h1 style="color: red;">500W</h1>
-                    <span>58092元/平米</span>
-                </div>
-            </div>
-            <hr>
-        </li>
-        <li>
-            <div class="row">
-                <div class="col-md-3">
-                    <a href="#" class="thumbnail">
-                        <img src="/static/img/test.jpeg" alt="">
-                    </a>
-                </div>
-                <div class="col-md-7">
-                    <div class="show-detail ">
-                        <p class="house-title">
-                            <a title="信义御城 精装1房，总价低，155万诚心出售，有钥匙看房"
-                               target="_blank" href="#">信义御城
-                                精装1房，总价低，155万诚心出售，有钥匙看房</a>
-                        </p>
-
-                        <p class="clearfix">
-                            <span class="iconfont icon-house"></span>
-                            <span>1室1厅</span>
-                            <span></span>
-                            <span>49.23平米</span>
-                            <span></span>
-                            <span>精装修</span>
-                            <span></span>
-                            <span>高层/32层</span>
-                            <span></span>
-                            <span>东北</span>
-                            <span></span>
-                            <span>2013年建</span>
-
-                        </p>
-
-                        <p class="clearfix">
-                            <span class="iconfont icon-dingwei"></span>
-                            <span class="whole-line">
-				    		<a href="#">龙岗</a>-<a
-                                    href="#">横岗二手房</a>-<a
-                                    target="_blank" href="#">信义御城 (信义御城豪园)</a>
-	    		</span>
-                        </p>
-
-
-                        <p class="clearfix">
-                            <!--学校标签-->
-                            <a href="#" target="_blank"><span>深圳市龙岗区横岗街道中心学校（小学部）</span></a>
-
-                            <span>距离3号线(龙岗线)横岗站约474米</span>
-                        </p>
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <h1 style="color: red;">500W</h1>
-                    <span>58092元/平米</span>
-                </div>
-            </div>
-            <hr>
-        </li>
     </ul>
     <nav aria-label="Page navigation">
         <ul class=" pager">

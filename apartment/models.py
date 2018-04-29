@@ -16,13 +16,14 @@ class Subway(models.Model):
 class Garden(models.Model):
     name = models.CharField(max_length=20, null=False, blank=False)
     location_id = models.ForeignKey(Location, db_column='location_id')
-    description = models.TextField()
     company = models.CharField(max_length=30)
 
 
+
+
 class Apartment(models.Model):
-    name = models.CharField(max_length=20, null=False, blank=False)
-    rent_type = models.BooleanField()
+    name = models.CharField(max_length=40, null=False, blank=False)
+    rent_type = models.BooleanField() #True 整租,False 合租
     size = models.FloatField( null=False, blank=False)
     room=models.SmallIntegerField(default=1)
     hall=models.SmallIntegerField(default=0)
@@ -32,14 +33,20 @@ class Apartment(models.Model):
     decoration_type = models.SmallIntegerField()
     price = models.IntegerField(null=False, blank=False)
     payment_type = models.SmallIntegerField()
-    forward = models.CharField(max_length=10)
+    forward = models.SmallIntegerField()
     user_id = models.ForeignKey(User, db_column='user_id')
     garden_id = models.ForeignKey(Garden, db_column='garden_id')
     # subway_id = models.ForeignKey(Subway,db_column='subway_id',default='')
-    img = models.ImageField()
+    description = models.TextField()
     created_time = models.DateTimeField(auto_now=True)
     is_rent = models.BooleanField(default=0)
 
+def apartment_img_path(instance, filename):
+    return '/'.join(['apartment', str(instance.apartment.id), filename])
+
+class ApartmentImg(models.Model):
+    apartment = models.ForeignKey(Apartment)
+    img = models.ImageField(upload_to=apartment_img_path)
 
 class Tag(models.Model):
     tag = models.CharField(max_length=20)

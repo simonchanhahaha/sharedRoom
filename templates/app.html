@@ -13,14 +13,14 @@
 
     </style>
     <script>
-        $(function(){
+        $(function () {
             $("#city").change(function () {
-                dis=$("#dis");
+                dis = $("#dis");
 
-                $.get('/city/'+$(this).val()+'/',function (list) {
+                $.get('/city/' + $(this).val() + '/', function (list) {
                     dis.empty().append('<option value="">请选择</option>');
-                    $.each(list.data,function (index,item) {
-                        dis.append('<option value="'+item.id+'">'+item.place+'</option>');
+                    $.each(list.data, function (index, item) {
+                        dis.append('<option value="' + item.id + '">' + item.place + '</option>');
                     })
                 })
             });
@@ -33,29 +33,43 @@
     <div class="container">
         <div class="navbar-header">
 
-            <a class="navbar-brand" href="#" data-pjax>
+            <a class="navbar-brand" href="/" data-pjax>
                 房屋出租系统
             </a>
         </div>
 
         <div class="collapse navbar-collapse" id="app-navbar-collapse">
             <!-- Left Side Of Navbar -->
-            <ul class="nav navbar-nav">
-                <li><a href="#" data-pjax>深圳</a></li>
+            <ul cl]ss="nav navbar-nav">
+                <li><a href="/{{ request.user.users_profile.location.id }}/" data-pjax>{{ request.user.users_profile.location.province }}</a></li>
             </ul>
 
             <!-- Right Side Of Navbar -->
+
             <ul class="nav navbar-nav navbar-right">
                 {% if request.user.is_authenticated %}
-                    <li><a href="/auth/profile/{{ user.id }}">{{ user.username }}</a></li>
-                    <li><a href="/auth/logout/">退出</a></li>
+                    <li role="presentation" class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+                           aria-expanded="false">
+                            {{ request.user.username }} <span class="caret"></span>
+                        </a>
+
+                        <ul class="dropdown-menu">
+                            <li><a href="/auth/profile/{{ request.user.id }}">个人资料</a></li>
+                            <li><a href="/apartment/rent/">我要出租</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="/auth/logout/">退出</a></li>
+                        </ul>
+                    </li>
                 {% else %}
+
                     <li><a href="/auth/showlogin/" data-pjax>登录</a></li>
                     <li><a href="/auth/showregister/" data-pjax>注册</a></li>
 
-                {% endif %}
 
-            </ul>
+                    </ul>
+
+                {% endif %}
         </div>
     </div>
 </nav>

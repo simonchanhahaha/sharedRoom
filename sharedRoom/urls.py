@@ -14,13 +14,18 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
 from django.conf.urls import include, url
+from django.conf.urls.static import static
+from django.conf import settings
 from django.contrib import admin
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^auth/',include('customAuth.urls')),
-    url(r'^apartment/',include('apartment.urls')),
-    url(r'^city/(\d+)/','apartment.views.city'),
-    url(r'(\d+)/(\d+)/$','apartment.views.show_apartment'),
-    url(r'^$','customAuth.views.showIndex')
-]
+    url(r'^auth/', include('customAuth.urls')),
+    url(r'^apartment/', include('apartment.urls')),
+    url(r'^city/(\d+)/', 'apartment.views.city'),
+    url(r'^(\d+)/$', 'apartment.views.show_city'),
+    url(r'^garden/(\d+)/$', 'apartment.views.show_garden'),
+    url(r'^$', 'apartment.views.showIndex'),
+    url(r'^avatar/', 'customAuth.views.avatar'),
+    url(r'^setavatar/', 'customAuth.views.set_avatar'),
+]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

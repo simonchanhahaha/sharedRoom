@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from customAuth.models import Users_profile, Location, Avatar
+from django.http import HttpResponse
 import os
 
 
@@ -66,24 +67,6 @@ def userLogout(request):
     return redirect('/')
 
 
-def showIndex(request):
-    if request.user.is_authenticated():
-        profile = Users_profile.objects.get(user_id=request.user.id)
-        if profile is not None:
-            data = {
-                'title': '首页',
-                'status': 'success',
-                'user': request.user
-            }
-            return render(request, 'index.html', context=data)
-        return redirect('/auth/showsetprofile/')
-    else:
-        data = {
-            'title': '首页',
-            'status': 'success',
-        }
-        return render(request, 'index.html', context=data)
-
 
 @login_required
 def showSetProfile(request):
@@ -113,11 +96,7 @@ def setProfile(request):
     # '''
     # set avatar
     # '''
-    # avatar = request.FILES['avatar']
-    # if avatar is not None:
-    #     setAvatar(user, avatar)
-    # else:
-    #     setAvatar(user)
+    set_avatar(request)
     return redirect('/')
 
 
@@ -131,22 +110,28 @@ def showProfile(request, user_id):
     return render(request, 'authTemplate/show_profile.html', context=data)
 
 
-def setAvatar(user, avatar=None):
-    avatar_obj = Avatar()
-    avatar_name = str(user.id) + '.' + avatar.name.split('.')[-1]
+def avatar(request):
+    return render(request,'authTemplate/avatar.html')
 
-    if avatar is None:
-        path = './static/img/avatar/default.png'
+def set_avatar(request):
+    if request.FILES.get('avatar') is not None:
+        if request.user.avatar is not None:
+            avatar = request.user.avatar
+            avatar.version += 1
+        else:
+            avatar = Avatar()
+            avatar.user_id = request.user
+        avatar.img = request.FILES['avatar']
+        avatar.path = 'avatar/' + str(request.user.id) + '/' + request.FILES['avatar'].name
+        avatar.save()
+        return HttpResponse(avatar.path)
     else:
-        path = './static/img/avatar/' + str(user.id) + '/'
-        if not os.path.exists(path):
-            os.mkdir(path)
-        with open(path + avatar_name, 'wb+') as pic:
-            for chunk in avatar.chunks():
-                pic.write(chunk)
-
-    avatar_obj.user_id = user
-    avatar_obj.path = path
-    avatar_obj.version = 1
-    avatar_obj.save()
-    return avatar_obj
+        if request.user.avatar is not None:
+            return redirect('auth/profile/'+str(request.user.id))
+        else:
+            avatar = Avatar()
+            avatar.user_id = request.user
+            avatar.img = 'avatar/default.png'
+            avatar.path = 'avatar/default.png'
+            avatar.save()
+            return HttpResponse(avatar.path)

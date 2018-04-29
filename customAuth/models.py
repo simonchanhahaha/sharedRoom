@@ -15,8 +15,11 @@ class Users_profile(models.Model):
     wechat = models.CharField(max_length=20, null=True, blank=True)
     location = models.ForeignKey(Location,db_column='location_id')
 
+def avatar_path(instance, filename):
+    return '/'.join(['avatar', str(instance.user_id.id), filename])
+
 class Avatar(models.Model):
     user_id=models.OneToOneField(User,db_column='user_id')
     path= models.CharField(max_length=40)
-    img = models.ImageField(upload_to='avatar')
+    img = models.ImageField(upload_to=avatar_path)
     version = models.SmallIntegerField(default=1)
