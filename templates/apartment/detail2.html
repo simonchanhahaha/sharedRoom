@@ -1,0 +1,153 @@
+{% extends 'app.html' %}
+
+{% block content %}
+    <div class="content">
+        <div class="properties-section">
+            <div class="container">
+                <div class="row">
+                    <div class="details-head">
+                        <!-- title -->
+                        <div class="clearfix">
+
+                            <div class="page-header">
+                                <h3>{{ apartment_name }}
+                                    <small>浏览次数：{{ views }}</small>
+                                    <small>{{ url }}</small>
+                                </h3>
+                            </div>
+                            <div class="clearfix">
+                                <ol class="breadcrumb">
+                                    <li><a href="/{{ p_location.id }}/">{{ p_location.province }}</a></li>
+                                    <li><a href="/{{ location.id }}/">{{ location.province }}</a></li>
+                                    <li class="active">{{ garden_name }}</li>
+                                </ol>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <br>
+                    <div class="properties-grids">
+                        <div class="col-md-9 properties-left">
+                            <img src="/media/{{ pic }}" alt="..." class="img-thumbnail">
+                            <div class="clearfix"></div>
+                            <br><br>
+                            <p class="text-muted">{{ description }}</p>
+                            <br><br>
+                            <table class="table table-hover">
+                                <tr>
+                                    <td>房屋面积:</td>
+                                    <td>{{ size }}㎡</td>
+                                </tr>
+                                <tr>
+                                    <td>房屋规模:</td>
+                                    <td>{{ room }} 室 {{ hall }} 厅 {{ bathroom }}卫</td>
+                                </tr>
+                                <tr>
+                                    <td>朝向：</td>
+                                    <td>{{ forward }}</td>
+                                </tr>
+                                <tr>
+                                    <td>小区名称：</td>
+                                    <td><a href="/garden/{{ garden_id }}" target="_blank">{{ garden_name }}</a></td>
+                                </tr>
+                                <tr>
+                                    <td>所在区域：</td>
+                                    <td><a target="_blank" href="/{{ p_location.id }}/">{{ p_location.province }}</a>
+                                        <a target="_blank" href="/{{ location.id }}/">{{ location.province }}</a></td>
+                                </tr>
+                                <tr>
+                                    <td>租金：</td>
+                                    <td>{{ price }}</td>
+                                </tr>
+                                <tr>
+                                    <td>付款方式:</td>
+                                    <td>{{ payment }}</td>
+                                </tr>
+                                <tr>
+                                    <td>招租类型:</td>
+                                    <td>{{ rent_type }}</td>
+                                </tr>
+                                <tr>
+                                    <td>装修情况:</td>
+                                    <td>{{ decoration }}</td>
+                                </tr>
+
+                            </table>
+                            <br><br>
+                            <div class="row">
+                                <h5>小区房源</h5>
+                                <div>
+                                    <ul class="list-unstyled clearfix" id="nearRooms">
+                                        {% for apartment_list in apartment_lists %}
+                                            <li>
+                                                <div class="col-md-4 col-sm-6">
+                                                    <div class="thumbnail">
+                                                        <a target="_blank" href="#">
+                                                            <img src="/media/{{ apartment_list.apartmentimg_set.first.img }}">
+                                                        </a>
+                                                        <div class="caption">
+                                                            <h4>{{ apartment_list.price }}元</h4>
+                                                            <p>
+                                                                <a target="_blank"
+                                                                   href="#">{{ apartment_list.name }}</a>
+                                                            </p>
+                                                            <p>
+                                                <span>
+                                                    <em>{{ apartment_list.room }}室{{ apartment_list.hall }}厅{{ apartment_list.bathroom }}卫</em>
+                                                    <em>{{ apartment_list.size }} m²</em>
+                                                </span>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-3">
+                            <div class="thumbnail">
+                                <img src="/media/{{ owner.avatar.path }}" alt="...">
+                                <div class="caption">
+                                    <h3>{{ owner.username }}</h3>
+                                    <p class="text-muted"><i class="fa fa-phone"></i>{{ owner.users_profile.phone }}</p>
+                                    <p class="text-muted"><i class="fa fa-phone"></i>{{ owner.users_profile.wechat }}
+                                    </p>
+
+                                    <hr>
+                                    <h3>{{ price }}<small>元/月</small></h3>
+                                    <hr>
+                                    <div class="btn btn-primary">
+                                        <i class="fa fa-angellist">
+                                            预定
+                                        </i>
+                                    </div>
+                                    {% if not star %}
+                                        <div id="star" class="btn star-button " count="{{ star_count }}"
+                                             data-id="{{ id }}">
+                                            <i class="fa fa-star-o"></i>&nbsp;收藏
+                                        </div>
+                                    {% else %}
+                                        <div id="star" class="btn star-button starred" count="{{ star_count }}"
+                                             data-id="{{ id }}">
+                                            <i class="fa fa-star"></i>&nbsp;取消收藏
+                                        </div>
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+{% endblock %}

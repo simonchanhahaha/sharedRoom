@@ -37,9 +37,61 @@ class Apartment(models.Model):
     user_id = models.ForeignKey(User, db_column='user_id')
     garden_id = models.ForeignKey(Garden, db_column='garden_id')
     # subway_id = models.ForeignKey(Subway,db_column='subway_id',default='')
+    views = models.IntegerField(default=1)
+    requirement = models.CharField(max_length=20,null=True,blank=True)
     description = models.TextField()
     created_time = models.DateTimeField(auto_now=True)
     is_rent = models.BooleanField(default=0)
+
+    def get_str_decoration(self):
+        '''
+        获取装修情况描述
+        get decoration situation description
+        :param self:
+        :return:
+        '''
+        if self.decoration_type == 1:
+            decoration = '毛坯'
+        elif self.decoration_type == 2:
+            decoration = '简单装修'
+        elif self.decoration_type == 3:
+            decoration = '中等装修'
+        elif self.decoration_type == 4:
+            decoration = '精装修'
+        elif self.decoration_type == 5:
+            decoration = '豪华装修'
+        else:
+            decoration = '其他'
+
+        return decoration
+
+    def get_str_forward(self):
+        '''
+        获取房屋朝向描述
+        get apartment forward description
+        :param self.forward:
+        :return:
+        '''
+        if self.forward == 1:
+            forward = '东'
+        elif self.forward == 2:
+            forward = '南'
+        elif self.forward == 3:
+            forward = '西'
+        elif self.forward == 4:
+            forward = '北'
+        elif self.forward == 5:
+            forward = '东北'
+        elif self.forward == 6:
+            forward = '西北'
+        elif self.forward == 7:
+            forward = '东南'
+        elif self.forward == 8:
+            forward = '西南'
+        else:
+            forward = '不知道房屋朝向'
+
+        return forward
 
 def apartment_img_path(instance, filename):
     return '/'.join(['apartment', str(instance.apartment.id), filename])
@@ -52,5 +104,3 @@ class Tag(models.Model):
     tag = models.CharField(max_length=20)
     apartment_id = models.ForeignKey(Apartment)
 
-# class Image(models.Model):
-#

@@ -39,7 +39,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'customAuth',
-    'apartment'
+    'apartment',
+    'order'
 )
 
 MIDDLEWARE_CLASSES = (

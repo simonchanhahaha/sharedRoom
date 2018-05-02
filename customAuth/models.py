@@ -6,6 +6,8 @@ class Location(models.Model):
     province = models.CharField(max_length=20, null=False, blank=False)
     pid = models.ForeignKey('self', null=True, blank=True, db_column='pid')
 
+    class Meta():
+        db_table='Location'
 
 
 class Users_profile(models.Model):

@@ -1,41 +1,153 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
-from apartment.models import Subway, Apartment, Garden,ApartmentImg
+from apartment.models import Subway, Apartment, Garden, ApartmentImg
 from customAuth.models import Location, Users_profile
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from order.models import Star
+
+
+def index(request):
+    user = request.user
+    location = user.users_profile.location
+    apartments = Apartment.objects.filter(is_rent=False)
+    hezu = apartments.filter(rent_type=False).all().reverse()
+    zhengzu = apartments.filter(rent_type=True).all().reverse()
+
+    lists_1 = hezu[0:3]
+    lists_2 = hezu[4:7]
+    lists_3 = zhengzu[0:3]
+    lists_4 = zhengzu[4:7]
+
+    hots_lists = Apartment.objects.filter(is_rent=False).order_by("-views").all()
+    hots = hots_lists[0:3]
+    data = {
+        'title': '首页',
+        'status': 'success',
+        'location': location,
+        'lists_1': lists_1,
+        'lists_2': lists_2,
+        'lists_3': lists_3,
+        'lists_4': lists_4,
+        'hots': hots
+    }
+    return render(request, 'welcome.html', context=data)
+
+
+def return_page_apartment(page, obj):
+    paginator = Paginator(obj, 20)
+
+    if page:
+        return paginator.page(page).object_list
+    else:
+        return paginator.page(1).object_list
+
+
+def return_pages(page, obj):
+    paginator = Paginator(obj, 20)
+
+    try:
+        pages = paginator.page(page)
+        return pages
+    except PageNotAnInteger:
+        pages = paginator.page(1)
+        return pages
+    except EmptyPage:
+        pages = paginator.page(paginator.num_pages)
+        return pages
 
 
 def showIndex(request):
-    if request.user.is_authenticated():
-        profile = Users_profile.objects.get(user_id=request.user.id)
-        if profile is not None:
-            user = request.user
-            location = user.users_profile.location
-            apartment_lists = Apartment.objects.filter(is_rent=False).all().reverse()
-            count = len(apartment_lists)
-            data = {
-                'title': '首页',
-                'status': 'success',
-                'location': location,
-                'apartment_lists': apartment_lists,
-                'count': count
-            }
-            return render(request, 'index.html', context=data)
-        return redirect('/auth/showsetprofile/')
-    else:
+    user = request.user
+    location = user.users_profile.location
+    apartments_all = Apartment.objects.filter(is_rent=False).all().reverse()
+    apartments_hezu = Apartment.objects.filter(is_rent=False).filter(rent_type=False).all().reverse()
+    apartments_zhengzu = Apartment.objects.filter(is_rent=False).filter(rent_type=True).all().reverse()
+    count_all = len(apartments_all)
+    count_hezu = len(apartments_hezu)
+    count_zhengzu = len(apartments_zhengzu)
+
+    page = request.GET.get('page')
+
+    apartment_all = return_page_apartment(page, apartments_all)
+    pages_all = return_pages(page, apartments_all)
+    apartment_hezu = return_page_apartment(page, apartments_hezu)
+    pages_hezu = return_pages(page, apartments_hezu)
+    apartment_zhengzu = return_page_apartment(page, apartments_zhengzu)
+    pages_zhengzu = return_pages(page, apartments_zhengzu)
+
+    data = {
+        'title1': '列表页-',
+        'status': 'success',
+        'location': location,
+        'apartment_all': apartment_all,
+        'apartment_hezu': apartment_hezu,
+        'apartment_zhengzu': apartment_zhengzu,
+        'count_all': count_all,
+        'count_hezu': count_hezu,
+        'count_zhengzu': count_zhengzu,
+        'pages_all': pages_all,
+        'pages_hezu': pages_hezu,
+        'pages_zhengzu': pages_zhengzu,
+    }
+    return render(request, 'index.html', context=data)
+
+
+def show_city(request, id):
+    city = Location.objects.filter(id=id).first()
+    if city is not None:
+        apartments_all = []
+        apartments_hezu = []
+        apartments_zhengzu = []
+        if len(city.location_set.all()) != 0:
+            garden_lists = []
+            for city_tmp in city.location_set.all():
+                garden_lists.extend(city_tmp.garden_set.all())
+        else:
+            garden_lists = city.garden_set.all()
+        for garden in garden_lists:
+            apartments = garden.apartment_set.filter(is_rent=False).all()
+            apartments_all.extend(apartments)
+
+        for apartment in apartments_all:
+            if apartment.rent_type is True:
+                apartments_zhengzu.append(apartment)
+            else:
+                apartments_hezu.append(apartment)
+
+        user = request.user
+        location = user.users_profile.location
+
+        count_all = len(apartments_all)
+        count_hezu = len(apartments_hezu)
+        count_zhengzu = len(apartments_zhengzu)
+
+        page = request.GET.get('page')
+
+        apartment_all = return_page_apartment(page, apartments_all)
+        pages_all = return_pages(page, apartments_all)
+        apartment_hezu = return_page_apartment(page, apartments_hezu)
+        pages_hezu = return_pages(page, apartments_hezu)
+        apartment_zhengzu = return_page_apartment(page, apartments_zhengzu)
+        pages_zhengzu = return_pages(page, apartments_zhengzu)
+
         data = {
-            'title': '首页',
+            'title1': '列表页-',
             'status': 'success',
+            'location': location,
+            'apartment_all': apartment_all,
+            'apartment_hezu': apartment_hezu,
+            'apartment_zhengzu': apartment_zhengzu,
+            'count_all': count_all,
+            'count_hezu': count_hezu,
+            'count_zhengzu': count_zhengzu,
+            'pages_all': pages_all,
+            'pages_hezu': pages_hezu,
+            'pages_zhengzu': pages_zhengzu,
         }
         return render(request, 'index.html', context=data)
-
-
-def show_all(request):
-    user = request.user
-    location_id = user.users_profile.location.id
-    # return HttpResponse(location)
-    return render()
-
+    else:
+        return redirect('/')
 
 def city(request, id):
     city = Location.objects.filter(pid=id)
@@ -60,11 +172,10 @@ def setRent(request):
     location_id = request.POST['district']
     location = Location.objects.filter(id=location_id).first()
     garden_name = request.POST['garden_name']
-    garden = Garden.objects.filter(name__contains=garden_name).first()
+    garden = Garden.objects.filter(name__contains=garden_name)
 
-
-    if garden is not None:
-        garden_id = garden
+    if len(garden) != 0:
+        garden_id = garden.first()
     else:
         new_garden = Garden()
         new_garden.name = garden_name
@@ -110,6 +221,8 @@ def setRent(request):
 
 def show_detail(request, id):
     apartment = Apartment.objects.filter(id=id).first()
+    apartment.views += 1
+    apartment.save()
     garden = apartment.garden_id
     apartment_lists = garden.apartment_set.all().reverse()
 
@@ -126,9 +239,13 @@ def show_detail(request, id):
     else:
         furniture = '无'
 
+    star = Star.objects.filter(user=request.user).filter(apartment=apartment).first()
     context = {
+        'title': '[' + apartment.name + ']',
+        'id': apartment.id,
         'apartment_name': apartment.name,
         'price': apartment.price,
+        'garden_id': apartment.garden_id.id,
         'garden_name': apartment.garden_id.name,
         'location': apartment.garden_id.location_id,
         'p_location': apartment.garden_id.location_id.pid,
@@ -138,16 +255,21 @@ def show_detail(request, id):
         'bathroom': apartment.bathroom,
         'hall': apartment.hall,
         'forward': forward,
+        'views': apartment.views,
         'decoration': decoration,
         'payment': payment,
         'rent_type': rent_type,
         'created_time': apartment.created_time,
         'apartment_lists': apartment_lists,
         'has_furniture': furniture,
-        'pic':apartment.apartmentimg_set.first().img
+        'pic': apartment.apartmentimg_set.first().img,
+        'star_count': apartment.star_set.count(),
+        'star': star,
+        'description': apartment.description,
+        'owner': apartment.user_id
     }
 
-    return render(request, 'apartment/detail.html', context=context)
+    return render(request, 'apartment/detail2.html', context=context)
     # return HttpResponse(context)
 
 
@@ -244,35 +366,3 @@ def show_garden(request, id):
 
     else:
         return redirect('/')
-
-
-def show_city(request, id):
-    city = Location.objects.filter(id=id).first()
-    if city is not None:
-        apartment_lists = []
-        if len(city.location_set.all())!=0:
-            garden_lists = []
-            for city_tmp in city.location_set.all():
-                garden_lists.extend(city_tmp.garden_set.all())
-            print("1")
-        else:
-            print("2")
-            garden_lists = city.garden_set.all()
-        for garden in garden_lists:
-            apartments = garden.apartment_set.all()
-            apartment_lists.extend(apartments)
-        count = len(apartment_lists)
-        location = request.user.users_profile.location
-        data = {
-            'title': city.province,
-            'status': 'success',
-            'location': location,
-            'apartment_lists': apartment_lists,
-            'user': request.user,
-            'count': count
-        }
-        return render(request, 'index.html', context=data)
-
-    else:
-        return redirect('/')
-

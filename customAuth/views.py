@@ -115,10 +115,10 @@ def avatar(request):
 
 def set_avatar(request):
     if request.FILES.get('avatar') is not None:
-        if request.user.avatar is not None:
+        try:
             avatar = request.user.avatar
             avatar.version += 1
-        else:
+        except:
             avatar = Avatar()
             avatar.user_id = request.user
         avatar.img = request.FILES['avatar']

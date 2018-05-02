@@ -1,74 +1,269 @@
 {% extends 'app.html' %}
 {% block content %}
-    <ul class="nav nav-tabs">
-        <li role="presentation" class="active"><a href="#">Home</a></li>
-        <li role="presentation"><a href="#">Profile</a></li>
-        <li role="presentation"><a href="#">Messages</a></li>
-    </ul>
-    <hr>
-    <div class="h5">共找到{{ count }}套房源</div>
-    <hr>
-    <ul class="list-unstyled">
-    {% for apartment in apartment_lists %}
-        <li>
-            <div class="row">
-                <div class="col-md-3">
-                    <a href="#" class="thumbnail">
-                        <img src="/media/{{ apartment.apartmentimg_set.first.img }}" alt="{{ apartment.name }}">
-                    </a>
-                </div>
-                <div class="col-md-7">
-                    <div class="show-detail ">
-                        <p class="house-title">
-                            <a title="{{ apartment.name }}"
-                               target="_blank" href="/apartment/{{ apartment.id }}">{{ apartment.name }}</a>
-                        </p>
+    <div class="container">
+        <script>
+            $(function () {
+                $('#all').tab('show');
 
-                        <p class="clearfix">
-                            <span class="iconfont icon-house"></span>
-                            <span>{{ apartment.room }}室{{ apartment.hall }}厅{{ apartment.bathroom }}卫</span>
-                            <span></span>
-                            <span>{{ apartment.size }}平米</span>
-                            <span></span>
-                            <span>{{ apartment.decoration }}</span>
-                            <span></span>
-                            <span>{{ apartment.floor }}</span>
-                            <span></span>
-                            <span>东北</span>
+                $('#hezu').tab('show');
 
-                        </p>
-
-
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <h1 style="color: red;">{{ apartment.price }}</h1>
-                </div>
-            </div>
-            <hr>
-        </li>
-    {% endfor %}
-    
-
-    </ul>
-    <nav aria-label="Page navigation">
-        <ul class=" pager">
-            <li class="previous">
-                <a href="#" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                </a>
-            </li>
-            <li><a href="#">1</a></li>
-            <li><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li><a href="#">4</a></li>
-            <li><a href="#">5</a></li>
-            <li class="next">
-                <a href="#" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                </a>
-            </li>
+                $('#zhengzu').tab('show');
+            });
+            $('a[href="#test-paper"]').click(function (e) {
+                showTabs('test-paper', 'pages/test-paper.jsp');
+                e.preventDefault();
+            });
+        </script>
+        <ul class="nav nav-tabs" id="myTab">
+            <li role="presentation" class="active"><a data-toggle="tab" href="#all">全部</a></li>
+            <li role="presentation"><a href="#hezu" data-toggle="tab">合租</a></li>
+            <li role="presentation"><a href="#zhengzu" data-toggle="tab">整租</a></li>
         </ul>
-    </nav>
+        <div id="myTabContent" class="tab-content">
+            <div class="tab-pane fade in active" id="all">
+                <div class="house-count">
+                    共找到<span class="house-sum">{{ count_all }}</span>套{{ location.province }}出租房源
+                </div>
+                <hr>
+                <ul id="ap-lists" class="list-unstyled">
+                    {% for apartment in apartment_all %}
+                        <li href="/apartment/{{ apartment.id }}">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <a href="/apartment/{{ apartment.id }}" class="thumbnail">
+                                        <img src="/media/{{ apartment.apartmentimg_set.first.img }}"
+                                             alt="{{ apartment.name }}">
+                                    </a>
+                                </div>
+                                <div class="col-md-7">
+                                    <div class="show-detail house-about">
+                                        <h3 class="house-title">
+                                            <a title="{{ apartment.name }}"
+                                               target="_blank"
+                                               href="/apartment/{{ apartment.id }}">{{ apartment.name }}</a>
+                                        </h3>
+                                        <p class="clearfix">
+                                            <span><a href="/{{ apartment.garden_id.location_id.id }}/">{{ apartment.garden_id.location_id.province }}</a></span>
+                                            <span class="flag-line"></span>
+                                            <span>{{ apartment.garden_id.name }}</span>
+                                            <span class="flag-line"></span>
+                                            <span>{{ apartment.room }}室{{ apartment.hall }}厅{{ apartment.bathroom }}卫</span>
+                                            <span class="flag-line"></span>
+                                        </p>
+                                        <p class="clearfix">
+                                            <span>大小：</span>
+                                            <span>{{ apartment.size }}平米</span>
+                                            <span class="flag-line"></span>
+                                            <span>朝向：</span>
+                                            <span>{{ apartment.get_str_forward }}</span>
+                                            <span class="flag-line"></span>
+                                            <span>{{ apartment.get_str_decoration }}</span>
+                                        </p>
 
+
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <br>
+                                    <p class="price"><span class="h2">{{ apartment.price }}</span><span
+                                            class="sale-unit">万</span></p>
+                                    <br>
+                                </div>
+                            </div>
+                            <hr>
+                        </li>
+                    {% endfor %}
+
+
+                </ul>
+                <nav aria-label="Page navigation">
+                    <ul class=" pager">
+                        {% if pages_all.has_previous %}
+                            <li class="previous">
+                                <a href="?page={{ page_sall.previous_page_number }}" aria-label="Previous"><span
+                                        aria-hidden="true">&laquo;</span></a>
+                            </li>
+                        {% endif %}
+                        {% for pg in pages_all.paginator.page_range %}
+                            {% if pages_all.number == pg %}
+                                <li class="active"><a href="?page={{ pg }}">{{ pg }}</a></li>
+                            {% else %}
+                                <li><a href="?page={{ pg }}">{{ pg }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                        {% if pages_all.has_next %}
+                            <li class="next">
+                                <a href="?page={{ pages_all.next_page_number }}" aria-label="Next"><span
+                                        aria-hidden="true">&raquo;</span></a></li>
+                        {% endif %}
+                    </ul>
+                </nav>
+
+            </div>
+            <div class="tab-pane fade" id="hezu">
+                <div class="house-count">
+                    共找到<span class="house-sum">{{ count_hezu }}</span>套{{ location.province }}合租房源
+                </div>
+                <hr>
+                <ul id="ap-lists" class="list-unstyled">
+                    {% for apartment in apartment_hezu %}
+                        <li href="/apartment/{{ apartment.id }}">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <a href="/apartment/{{ apartment.id }}" class="thumbnail">
+                                        <img src="/media/{{ apartment.apartmentimg_set.first.img }}"
+                                             alt="{{ apartment.name }}">
+                                    </a>
+                                </div>
+                                <div class="col-md-7">
+                                    <div class="show-detail house-about">
+                                        <h3 class="house-title">
+                                            <a title="{{ apartment.name }}"
+                                               target="_blank"
+                                               href="/apartment/{{ apartment.id }}">{{ apartment.name }}</a>
+                                        </h3>
+                                        <p class="clearfix">
+                                            <span><a href="/{{ apartment.garden_id.location_id.id }}/">{{ apartment.garden_id.location_id.province }}</a></span>
+                                            <span class="flag-line"></span>
+                                            <span>{{ apartment.garden_id.name }}</span>
+                                            <span class="flag-line"></span>
+                                            <span>{{ apartment.room }}室{{ apartment.hall }}厅{{ apartment.bathroom }}卫</span>
+                                            <span class="flag-line"></span>
+                                        </p>
+                                        <p class="clearfix">
+                                            <span>大小：</span>
+                                            <span>{{ apartment.size }}平米</span>
+                                            <span class="flag-line"></span>
+                                            <span>朝向：</span>
+                                            <span>{{ apartment.get_str_forward }}</span>
+                                            <span class="flag-line"></span>
+                                            <span>{{ apartment.get_str_decoration }}</span>
+                                        </p>
+
+
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <br>
+                                    <p class="price"><span class="h2">{{ apartment.price }}</span><span
+                                            class="sale-unit">万</span></p>
+                                    <br>
+                                </div>
+                            </div>
+                            <hr>
+                        </li>
+                    {% endfor %}
+
+
+                </ul>
+                <nav aria-label="Page navigation">
+                    <ul class=" pager">
+                        {% if pages_hezu.has_previous %}
+                            <li class="previous">
+                                <a href="?page={{ pages_hezu.previous_page_number }}" aria-label="Previous"><span
+                                        aria-hidden="true">&laquo;</span></a>
+                            </li>
+                        {% endif %}
+                        {% for pg in pages_hezu.paginator.page_range %}
+                            {% if pages_hezu.number == pg %}
+                                <li class="active"><a href="?page={{ pg }}">{{ pg }}</a></li>
+                            {% else %}
+                                <li><a href="?page={{ pg }}">{{ pg }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                        {% if pages_hezu.has_next %}
+                            <li class="next">
+                                <a href="?page={{ pages_hezu.next_page_number }}" aria-label="Next"><span
+                                        aria-hidden="true">&raquo;</span></a></li>
+                        {% endif %}
+                    </ul>
+                </nav>
+
+            </div>
+            <div class="tab-pane fade" id="zhengzu">
+                <div class="house-count">
+                    共找到<span class="house-sum">{{ count_zhengzu }}</span>套{{ location.province }}整租房源
+                </div>
+                <hr>
+                <ul id="ap-lists" class="list-unstyled">
+                    {% for apartment in apartment_zhengzu %}
+                        <li href="/apartment/{{ apartment.id }}">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <a href="/apartment/{{ apartment.id }}" class="thumbnail">
+                                        <img src="/media/{{ apartment.apartmentimg_set.first.img }}"
+                                             alt="{{ apartment.name }}">
+                                    </a>
+                                </div>
+                                <div class="col-md-7">
+                                    <div class="show-detail house-about">
+                                        <h3 class="house-title">
+                                            <a title="{{ apartment.name }}"
+                                               target="_blank"
+                                               href="/apartment/{{ apartment.id }}">{{ apartment.name }}</a>
+                                        </h3>
+                                        <p class="clearfix">
+                                            <span><a href="/{{ apartment.garden_id.location_id.id }}/">{{ apartment.garden_id.location_id.province }}</a></span>
+                                            <span class="flag-line"></span>
+                                            <span>{{ apartment.garden_id.name }}</span>
+                                            <span class="flag-line"></span>
+                                            <span>{{ apartment.room }}室{{ apartment.hall }}厅{{ apartment.bathroom }}卫</span>
+                                            <span class="flag-line"></span>
+                                        </p>
+                                        <p class="clearfix">
+                                            <span>大小：</span>
+                                            <span>{{ apartment.size }}平米</span>
+                                            <span class="flag-line"></span>
+                                            <span>朝向：</span>
+                                            <span>{{ apartment.get_str_forward }}</span>
+                                            <span class="flag-line"></span>
+                                            <span>{{ apartment.get_str_decoration }}</span>
+                                        </p>
+
+
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <br>
+                                    <p class="price"><span class="h2">{{ apartment.price }}</span><span
+                                            class="sale-unit">万</span></p>
+                                    <br>
+                                </div>
+                            </div>
+                            <hr>
+                        </li>
+                    {% endfor %}
+
+
+                </ul>
+                <nav aria-label="Page navigation">
+                    <ul class=" pager">
+                        {% if pages_zhengzu.has_previous %}
+                            <li class="previous">
+                                <a href="?page={{ pages_zhengzu.previous_page_number }}" aria-label="Previous"><span
+                                        aria-hidden="true">&laquo;</span></a>
+                            </li>
+                        {% endif %}
+                        {% for pg in pages_zhengzu.paginator.page_range %}
+                            {% if pages.number == pg %}
+                                <li class="active"><a href="?page={{ pg }}">{{ pg }}</a></li>
+                            {% else %}
+                                <li><a href="?page={{ pg }}">{{ pg }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                        {% if pages_zhengzu.has_next %}
+                            <li class="next">
+                                <a href="?page={{ pages_zhengzu.next_page_number }}" aria-label="Next"><span
+                                        aria-hidden="true">&raquo;</span></a></li>
+                        {% endif %}
+                    </ul>
+                </nav>
+
+            </div>
+        </div>
+
+
+        <hr>
+
+    </div>
 {% endblock %}

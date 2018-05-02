@@ -25,7 +25,12 @@ urlpatterns = [
     url(r'^city/(\d+)/', 'apartment.views.city'),
     url(r'^(\d+)/$', 'apartment.views.show_city'),
     url(r'^garden/(\d+)/$', 'apartment.views.show_garden'),
-    url(r'^$', 'apartment.views.showIndex'),
+    # url(r'^$', 'apartment.views.showIndex'),
+    url(r'^$', 'apartment.views.index'),
     url(r'^avatar/', 'customAuth.views.avatar'),
     url(r'^setavatar/', 'customAuth.views.set_avatar'),
+    url(r'^test/$','apartment.views.test'),
+    url(r'list/all','apartment.views.index'),
+    url(r'list/hezu','apartment.views.show_hezu'),
+    url(r'list/zhengzu','apartment.views.show_zhengzu'),
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

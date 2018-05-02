@@ -1,0 +1,129 @@
+.house-about,
+.house-address {
+    font-size: 14px;
+    color: #1b1b1b !important;
+    margin-top: 28px;
+}
+
+.house-about span {
+    margin-top: 15px;
+    float: left;
+}
+
+.house-title {
+    position: relative;
+    margin-top: -2px;
+    width: auto;
+    overflow: hidden;
+    white-space: nowrap;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+}
+
+.house-title a {
+    color: #474a4d;
+    float: left;
+    max-width: 512px;
+    white-space: nowrap;
+    overflow: hidden;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    font-size: 24px;
+    font-weight: 700;
+
+    display: block;
+}
+
+.house-title a:hover {
+    color: #ffc601;
+}
+
+.house-about .iconfont {
+    margin-right: 20px;
+}
+
+.house-about .alink,
+.house-about .alink:link,
+.house-about .alink:hover {
+    padding: 0 5px;
+    text-decoration: underline;
+}
+
+.house-count {
+    font-size: 20px;
+    border-bottom: 1px solid #f4f4f4;
+    padding: 33px 0 37px;
+}
+
+.house-sum {
+    color: #ffc601;
+    margin: 0 5px;
+}
+
+.flag-line {
+    width: 0;
+    height: 16px;
+    overflow: hidden;
+    margin: 2px 10px 0;
+    border-right: #ccc solid 1px;
+    border-left: #efefef solid 1px;
+    font-size: 0;
+}
+
+.starred {
+    animation: done .6s backwards;
+}
+
+.star-button {
+    border-color: #3ebd5f;
+    color: #3ebd5f;
+    font-weight: 600;
+}
+
+.star-button:hover {
+    background: #3ebd5f;
+    color: #fff;
+}
+
+.star-button.starred i {
+    animation: done .6s backwards;
+}
+
+.star-button:after {
+    content: "(" attr(count) ")";
+}
+
+.price, .price span {
+    color: #ffc601;
+}
+
+a, p, span {
+    color: #474a4d;
+}
+
+a:link {
+    color: #474a4d;
+}
+
+a:hover {
+    color: #ffc601;
+}
+
+h3.desc {
+    padding: 5%;
+    font-size: 1.3em;
+}
+
+h3.desc a {
+    text-transform: uppercase;
+    color: #FFA503;
+}
+
+h3.desc a:hover {
+    color: #333;
+}
+
+.caption a:link, .caption a:active, .caption a:visited, .caption a:hover {
+    text-decoration: none;
+    color: #FFA503;
+}

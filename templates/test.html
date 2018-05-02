@@ -1,0 +1,79 @@
+<li class="active">
+    <a href="#home" data-toggle="tab" name="menu-ctrl">
+        <span class="glyphicon glyphicon-home">&nbsp;</span> 主页
+        <span class="sr-only">(current)</span>
+    </a>
+</li>
+<li>
+    <a href="#test-paper">
+        <span class="glyphicon glyphicon-list-alt">&nbsp;</span> 试卷库
+    </a>
+</li>
+<li>
+    <a href="#favorite">
+        <span class="glyphicon glyphicon-bookmark">&nbsp;</span> 我的收藏
+    </a>
+</li>
+<li>
+    <a href="#about">
+        <span class="glyphicon glyphicon-info-sign">&nbsp;</span> 关于
+    </a>
+</li> <!--- /. Nav tabs--->
+
+
+<div id="myTabContent" class="tab-content">
+    <!-- 试卷库页面 -->
+    <div class="tab-pane fade" id="test-paper"></div>
+    <!-- 收藏页面 -->
+    <div class="tab-pane fade" id="favorite"></div>
+    <!-- 关于页面 -->
+    <div class="tab-pane fade" id="about"></div>
+    <!-- 用户信息页面 -->
+    <div class="tab-pane fade" id="user-info-page"></div>
+</div>
+
+
+<script>
+    function showTabs(tabsId, url) {
+        $("a[href='#" + tabsId + "']").tab('show');
+        var $tabContent = $('#' + tabsId);
+        if ($tabContent.length < 100) {
+            $tabContent.load(url);
+            //console.info(tabsId + ' load done!');
+        }
+    }
+
+    //依次为每个tab导航a标签添加单击事件
+    $('a[href="#test-paper"]').click(function (e) {
+        showTabs('test-paper', 'pages/test-paper.jsp');
+        e.preventDefault();
+    });
+
+    var tabsData = [{
+        "id": "test-paper",
+        "url": "pages/test-paper.jsp"
+    }, {
+        "id": "favorite",
+        "url": "pages/favorite.jsp"
+    }, {
+        "id": "about",
+        "url": "pages/about.jsp"
+    }, {
+        "id": "user-info-page",
+        "url": "pages/user-info.jsp"
+    }];
+
+    $(tabsData).each(function () {
+        //console.info(this.id + "--->" + this.url);
+        $("a[href='#" + this.id + "']").bind('click', {
+            id: this.id,
+            url: this.url
+        }, tabsHandler);
+    });
+
+    function tabsHandler(event) {
+        var data = event.data;
+        showTabs(data.id, data.url);
+        return false; //阻止默认a标签响应
+    }
+</script>

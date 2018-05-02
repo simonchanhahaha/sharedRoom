@@ -16,12 +16,12 @@ from customAuth.models import Location
 from django.contrib.auth.models import User
 from apartment.models import Garden,Apartment
 class AnjukeSpider(CrawlSpider):
-    name = 'anjuke'
+    name = 'ajk_hezu'
     allowed_domains = ['anjuke.com']
-    start_urls = ['https://sz.zu.anjuke.com/fangyuan/p1-x1/']
+    start_urls = ['https://sz.zu.anjuke.com/fangyuan/p2-x2/']
 
     rules = (
-        Rule(LinkExtractor(allow=r'/fangyuan/p(\d+)-x1/'), follow=True),
+        Rule(LinkExtractor(allow=r'/fangyuan/p(\d+)-x2/'), follow=True),
         Rule(LinkExtractor(allow=r'/fangyuan/(\d+)'), callback='parse_item', follow=True),
     )
 
@@ -53,7 +53,7 @@ class AnjukeSpider(CrawlSpider):
 
             apartment = ApartmentItem()
             apartment['name'] = response.xpath("//h3[@class='house-title']/text()").extract()[0]
-            apartment['rent_type'] = True
+            apartment['rent_type'] = False
             apartment['size'] = house_info.re('(\d+)平方米')[0]
 
             structure = house_info.re("(\d+)室(\d+)厅(\d+)卫")
@@ -63,7 +63,7 @@ class AnjukeSpider(CrawlSpider):
 
             apartment['floor'] = house_info.re("共(\d+)层")[0]
             apartment['has_furniture'] = True
-
+            apartment['requirement'] = house_info.xpath("//li[9]/span[@class='info']/text()").extract()[0]
             decor = response.xpath("//ul[1]/li[6]/span[2]/text()").extract()[0]
             if decor == '毛坯':
                 decoration = 1

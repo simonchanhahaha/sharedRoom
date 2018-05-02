@@ -1,0 +1,163 @@
+{% extends 'app.html' %}
+{% block content %}
+
+    <div class="wrap-box"></div>
+
+    <div class="wrap">
+        <div class="module-title">
+            <h2 class="title">合租</h2>
+            <p class="modulePretext">合租为人们提供了一个较为便宜的租房方式，更为刚毕业的大学生节省一大笔开销，与不同的人住在同一个屋檐下，凝听他们的故事，会不会让出门在外的你，也会有一种家的温暖呢？
+                <a href="/{{ location.id }}/">>>点击更多房源>></a></p>
+        </div>
+        <div class="container-fluid">
+            <div class="row">
+                {% for apartment in lists_1 %}
+
+                    <div class="col-md-4">
+                        <div class="thumbnail hover_img">
+                            <img src="/media/{{ apartment.apartmentimg_set.first.img }}" alt=""/>
+                            <div class="caption">
+                                <h3><a href="/apartment/{{ apartment.id }}/">{{ apartment.name }}</a></h3>
+                                <p>
+                                    <span>{{ apartment.garden_id.location_id.pid.province }}</span>
+                                    <span>-</span>
+                                    <span>{{ apartment.garden_id.location_id.province }}</span>
+                                    <span class="flag-line"></span>
+                                    <span>{{ apartment.garden_id.name }}</span>
+                                    <span class="flag-line"></span>
+                                    <span>{{ apartment.room }}室{{ apartment.hall }}厅{{ apartment.bathroom }}卫</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="row">
+                {% for apartment in lists_1 %}
+
+                    <div class="col-md-4">
+                        <div class="thumbnail hover_img">
+                            <img src="/media/{{ apartment.apartmentimg_set.first.img }}" alt=""/>
+                            <div class="caption">
+                                <h3><a href="/apartment/{{ apartment.id }}/">{{ apartment.name }}</a></h3>
+                                <p>
+                                    <span>{{ apartment.garden_id.location_id.pid.province }}</span>
+                                    <span>-</span>
+                                    <span>{{ apartment.garden_id.location_id.province }}</span>
+                                    <span class="flag-line"></span>
+                                    <span>{{ apartment.garden_id.name }}</span>
+                                    <span class="flag-line"></span>
+                                    <span>{{ apartment.room }}室{{ apartment.hall }}厅{{ apartment.bathroom }}卫</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+
+        <div class="module-title">
+            <h2 class="title">整租</h2>
+            <p class="modulePretext">相信很多大学生在实习或者大四毕业的时候都将奔赴远方，在那里打拼，闯出自己的一片天空，但是很多时候却因为居住的问题，让自己本来就不多的工资花费了一大部分在住的问题上，
+                希望这个毕业设计的思想，能够为应届生和在校生提供一个平台，共享房屋信息，免除中介收取的额外费用，让他们能够以合适的价格居住。<a href="/{{ location.id }}/">>>点击更多房源>></a>
+            </p>
+        </div>
+        <div class="container-fluid">
+            <div class="row">
+                {% for apartment in lists_1 %}
+
+                    <div class="col-md-4">
+                        <div class="thumbnail hover_img">
+                            <img src="/media/{{ apartment.apartmentimg_set.first.img }}" alt=""/>
+                            <div class="caption">
+                                <h3><a href="/apartment/{{ apartment.id }}/">{{ apartment.name }}</a></h3>
+                                <p>
+                                    <span>{{ apartment.garden_id.location_id.pid.province }}</span>
+                                    <span>-</span>
+                                    <span>{{ apartment.garden_id.location_id.province }}</span>
+                                    <span class="flag-line"></span>
+                                    <span>{{ apartment.garden_id.name }}</span>
+                                    <span class="flag-line"></span>
+                                    <span>{{ apartment.room }}室{{ apartment.hall }}厅{{ apartment.bathroom }}卫</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="row">
+                {% for apartment in lists_1 %}
+
+                    <div class="col-md-4">
+                        <div class="thumbnail hover_img">
+                            <img src="/media/{{ apartment.apartmentimg_set.first.img }}" alt=""/>
+                            <div class="caption">
+                                <h3><a href="/apartment/{{ apartment.id }}/">{{ apartment.name }}</a></h3>
+                                <p>
+                                    <span>{{ apartment.garden_id.location_id.pid.province }}</span>
+                                    <span>-</span>
+                                    <span>{{ apartment.garden_id.location_id.province }}</span>
+                                    <span class="flag-line"></span>
+                                    <span>{{ apartment.garden_id.name }}</span>
+                                    <span class="flag-line"></span>
+                                    <span>{{ apartment.room }}室{{ apartment.hall }}厅{{ apartment.bathroom }}卫</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <br>
+        <div class="content-bottom">
+            <div class="col_1_of_3 span_1_of_3">
+                <h3>关于这个毕业设计</h3>
+                <p class="desc1">相信很多大学生在实习或者大四毕业的时候都将奔赴远方，在那里打拼，闯出自己的一片天空，但是很多时候却因为居住的问题，让自己本来就不多的工资花费了一大部分在住的问题上，
+                    希望这个毕业设计的思想，能够为应届生和在校生提供一个平台，共享房屋信息，免除中介收取的额外费用，让他们能够以合适的价格居住。</p>
+            </div>
+            <div class="col_1_of_3 span_1_of_3">
+                <h3>热门房东</h3>
+                <div class="module-text">
+                    <strong class="module-item">28.09.2013</strong>
+                    <h4><a class="moduleItemTitle" href="#">Lorem ipsum dolor sit amet, consec teer adipiscing. Prsent
+                        vestibulum.</a></h4>
+                    <p>Lorem ipsum dolor sit amet, consec tetuer adipi
+                        scing. Praesent vestibu. lum molestie lacuiirhs. Aenean non ummy hendreriauris.
+                        Phasellllus. </p>
+                </div>
+                <div class="module-text">
+                    <strong class="module-item">29.09.2013</strong>
+                    <h4><a class="moduleItemTitle" href="#">Lorem ipsum dolor sit amet, consec teer adipiscing. Prsent
+                        vestibulum.</a></h4>
+                    <p>Lorem ipsum dolor sit amet, consec tetuer adipi
+                        scing. Praesent vestibu. lum molestie lacuiirhs. Aenean non ummy hendreriauris.
+                        Phasellllus. </p>
+                </div>
+            </div>
+            <div class="col_1_of_3 span_1_of_3">
+                <h3>当地热门房源</h3>
+                {% for hot in hots %}
+                    <div class="latest-news-grid">
+                        <div class="latest-news-pic">
+                            <img src="/media/{{ hot.apartmentimg_set.first.img }}" title="imag-name">
+                        </div>
+                        <div class="latest-news-info">
+                            <a href="#">{{ hot.created_time }}</a>
+                            <p class="desc1">{{ hot.name }}</p>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                {% endfor %}
+                <div class="clear"></div>
+            </div>
+
+        </div>
+        <div class="clear"></div>
+    </div>
+    <hr>
+{% endblock %}

@@ -1,5 +1,20 @@
 {% extends 'app.html' %}
 {% block content %}
+    <script>
+        $(function () {
+            $("#city").change(function () {
+                dis = $("#dis");
+
+                $.get('/city/' + $(this).val() + '/', function (list) {
+                    dis.empty().append('<option value="">请选择</option>');
+                    $.each(list.data, function (index, item) {
+                        dis.append('<option value="' + item.id + '">' + item.place + '</option>');
+                    })
+                })
+            });
+        });
+
+    </script>
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">

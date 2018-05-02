@@ -5,7 +5,13 @@
     <div class="details-head">
         <!-- title -->
         <div class="clearfix">
-            <h2>{{ apartment_name }}</h2>
+
+            <div class="page-header">
+                <h3>{{ apartment_name }}
+                    <small>浏览次数：{{ views }}</small>
+                    <small>{{ url }}</small>
+                </h3>
+            </div>
             <div class="clearfix">
                 <ol class="breadcrumb">
                     <li><a href="/{{ p_location.id }}/">{{ p_location.province }}</a></li>
@@ -24,142 +30,60 @@
             </div>
         </div>
         <div class="col-md-5">
-            <div class="clearfix">
-                <p class="">
-                <h2 style="color: red;">{{ price }}元/月</h2></p>
-                <div class="col-md-12">
-                    <p class="clearfix">
-                        <span class="calculator fl"><a class="icons" href="#" id="compute"
-                                                       date-scroll="#scrollto-4"></a></span>
-                    </p>
-                </div>
-                <!-- list -->
-                <div class="col-md-12">
-                    <ul class="list-unstyled">
-                        <li class="clearfix">
-                            <span class="">小区名称</span>
-                            <p><a href="#"
-                                  target="_blank">{{ garden_name }}</a></p>
-                        </li>
+            <div class="row">
+                <p class="clearfix">
+                    <span class="h3">{{ price }}</span>元/月
 
+                    <span>{{ rent_type }}</span>
+                    <span>{{ payment }}</span>
+                </p>
 
-                        <li class="clearfix">
-
-                            <p class="book_room"><a href="javascript:;">预约看房</a></p>
-                        </li>
-
-
-                        <li class="clearfix">
-                            <span class="">所在区域</span>
-                            <div class="clearfix">
-                                <p>
-                                    [
-                                    <a href="/{{ p_location.id }}/">{{ p_location.province }}</a>
-                                    <a href="/{{ location.id }}/">{{ location.province }}</a>
-                                    ]
-                                </p>
-                            </div>
-                        </li>
-                        <li class="clearfix">
-                            <div class="btn btn-primary">预定</div>
-                        </li>
-                    </ul>
-                </div>
-                <hr/>
             </div>
+            <hr>
+            <div class="row">
+                <ul class="list-unstyled">
+                    <li class="clearfix">
+                        <span class="field left">小区名称</span>
+                        <span><a href="/garden/{{ garden_id }}" target="_blank">{{ garden_name }}</a></span>
+                    </li>
+
+                    <li class="clearfix">
+                        <span>看房时间</span>
+                        <span ><a href="javascript:;" id="makeAppointmentBtn">预约看房</a></span>
+                    </li>
+
+
+                    <li class="clearfix">
+                        <span class="field left">所在区域</span>
+                        <div class="r-b-a left clearfix">
+                            <i class="fa fa-map-marker "></i>
+                            <span>
+                                [
+                                <a target="_blank" href="/{{ p_location.id }}/">{{ p_location.province }}</a>
+                                <a target="_blank" href="/{{ location.id }}/">{{ location.province }}</a>
+                                ]
+                            </span>
+
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-md-4">
+                    <p>{{ room }} 室 {{ hall }} 厅 {{ bathroom }}卫</p>
+                </div>
+                <div class="col-md-4">
+                    <p>{{ size }} ㎡</p>
+                </div>
+                <div class="col-md-4">
+                    {{ forward }}
+                </div>
+            </div>
+
         </div>
-    </div>
-    <div class="row">
+
 
     </div>
-    <div class="row">
-        <div class="col-md-7">
-            <div class="clearfix">
-                <!-- column-main -->
-                <div class="column-main fl">
-                    <!-- 房源信息 -->
-                    <table class="table table-hover">
-                        <tr>
-                            <th>房源信息</th>
-                            <th>房屋户型</th>
-                            <td>{{ room }} 室 {{ hall }} 厅 {{ bathroom }}卫</td>
-                            <th>所在楼层</th>
-                            <td>{{ floor }}</td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <th>建筑面积</th>
-                            <td>{{ size }} ㎡</td>
-                            <th>装修情况</th>
-                            <td>{{ decoration }}</td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <th>房屋朝向</th>
-                            <td>{{ forward }}</td>
-                            <th>家具情况</th>
-                            <td>{{ has_furniture }}</td>
-                        </tr>
 
-                        {#                    </table>#}
-                        {#                    <table class="table table-hover">#}
-                        <tr>
-                            <th>交易属性</th>
-                            <th>租房类型</th>
-                            <td>{{ rent_type }}</td>
-                            <th>付款类型</th>
-                            <td>{{ payment }}</td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <th>房源编码</th>
-                            <td></td>
-                            <td>委托时间</td>
-                            <td>{{ created_time }}</td>
-                        </tr>
-                    </table>
-
-                </div>
-                <!-- column-main -->
-
-            </div>
-
-            <!-- 附近房源 -->
-            <div class="">
-                <div>
-                    <h5>小区房源</h5>
-                </div>
-                <div>
-                    <div>
-                        <ul class="list-unstyled clearfix" id="nearRooms">
-                            {% for apartment_list in apartment_lists %}
-                                <li>
-                                    <div class="col-md-4 col-sm-6">
-                                        <div class="thumbnail">
-                                            <a target="_blank" href="#">
-                                                <img src="/media/{{ apartment_list.apartmentimg_set.first.img }}">
-                                            </a>
-                                            <div class="caption">
-                                                <h4>{{ apartment_list.price }}元</h4>
-                                                <p>
-                                                    <a target="_blank" href="#">{{ apartment_list.name }}</a>
-                                                </p>
-                                                <p>
-                                                <span>
-                                                    <em>{{ apartment_list.room }}室{{ apartment_list.hall }}厅{{ apartment_list.bathroom }}卫</em>
-                                                    <em>{{ apartment_list.size }} m²</em>
-                                                </span>
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 {% endblock %}
