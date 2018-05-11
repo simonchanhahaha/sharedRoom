@@ -111,36 +111,53 @@
 
 
                         <div class="col-md-3">
-                            <div class="thumbnail">
-                                <img src="/media/{{ owner.avatar.path }}" alt="...">
-                                <div class="caption">
+
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    业主信息
+                                </div>
+                                <div class="panel-body">
+                                    <img src="/media/{{ owner.avatar.path }}" alt="" class="img-thumbnail">
+                                    <hr>
                                     <h3>{{ owner.username }}</h3>
-                                    <p class="text-muted"><i class="fa fa-phone"></i>{{ owner.users_profile.phone }}</p>
-                                    <p class="text-muted"><i class="fa fa-phone"></i>{{ owner.users_profile.wechat }}
-                                    </p>
+                                    {% if request.user.is_authenticated %}
+                                        <p class="text-muted"><i
+                                                class="fa fa-phone"></i>{{ owner.users_profile.phone }}
+                                        </p>
+                                        <p class="text-muted"><i
+                                                class="fa fa-wechat"></i>{{ owner.users_profile.wechat }}
+                                        </p>
+                                    {% else %}
+                                        <p class="text-muted"><i class="fa fa-phone"></i>请登录后查看
+                                        </p>
+                                        <p class="text-muted"><i class="fa fa-wechat"></i>请登录后查看
+                                        </p>
+                                    {% endif %}
+
 
                                     <hr>
-                                    <h3>{{ price }}<small>元/月</small></h3>
+                                    <h3>{{ price }}
+                                        <small>元/月</small>
+                                    </h3>
                                     <hr>
-                                    <div class="btn btn-primary">
-                                        <i class="fa fa-angellist">
-                                            预定
-                                        </i>
-                                    </div>
-                                    {% if not star %}
-                                        <div id="star" class="btn star-button " count="{{ star_count }}"
-                                             data-id="{{ id }}">
-                                            <i class="fa fa-star-o"></i>&nbsp;收藏
-                                        </div>
+                                    {% if request.user.is_authenticated %}
+                                        {% if not star %}
+                                            <div id="star" class="btn star-button " count="{{ star_count }}"
+                                                 data-id="{{ id }}">
+                                                <i class="fa fa-star-o"></i>&nbsp;收藏
+                                            </div>
+                                        {% else %}
+                                            <div id="star" class="btn star-button starred" count="{{ star_count }}"
+                                                 data-id="{{ id }}">
+                                                <i class="fa fa-star"></i>&nbsp;取消收藏
+                                            </div>
+                                        {% endif %}
                                     {% else %}
-                                        <div id="star" class="btn star-button starred" count="{{ star_count }}"
-                                             data-id="{{ id }}">
-                                            <i class="fa fa-star"></i>&nbsp;取消收藏
-                                        </div>
+                                        <a href="/auth/showregister" class="btn btn-info">注册</a>
+                                        <a href="/auth/showlogin" class="btn btn-info">登录</a>
                                     {% endif %}
 
                                 </div>
-
                             </div>
                         </div>
 

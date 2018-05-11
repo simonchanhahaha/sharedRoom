@@ -1,7 +1,21 @@
+h1, h2, h3, h4, h5, h6, p, a, span, div {
+    font-family: 'Raleway', sans-serif;
+}
+
+html, body {
+    background-color: #fff;
+    color: #29272b;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 200;
+    height: 100vh;
+    margin: 0;
+    /*background-color: #6A6A6A;*/
+}
+
 .house-about,
 .house-address {
     font-size: 14px;
-    color: #1b1b1b !important;
+    color: #29272b !important;
     margin-top: 28px;
 }
 
@@ -89,10 +103,6 @@
     animation: done .6s backwards;
 }
 
-.star-button:after {
-    content: "(" attr(count) ")";
-}
-
 .price, .price span {
     color: #ffc601;
 }
@@ -126,4 +136,7 @@ h3.desc a:hover {
 .caption a:link, .caption a:active, .caption a:visited, .caption a:hover {
     text-decoration: none;
     color: #FFA503;
+}
+.btn a{
+    color: #474a4d;
 }

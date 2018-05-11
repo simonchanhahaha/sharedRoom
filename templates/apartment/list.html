@@ -1,0 +1,98 @@
+{% extends 'app.html' %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <ul class="nav nav-tabs" id="myTab">
+                <li role="presentation"
+                        {% if order == '0' %}
+                    class="active"
+                        {% endif %}
+                ><a href="?order=0">默认</a></li>
+                <li role="presentation"
+                        {% if order == '1' %}
+                    class="active"
+                        {% endif %}
+                ><a href="?order=1">价格从高到低</a></li>
+                <li role="presentation"
+                        {% if order == '2' %}
+                    class="active"
+                        {% endif %}
+                ><a href="?order=2">阅览数从高到低</a></li>
+            </ul>
+            <br>
+            <ul id="ap-lists" class="list-unstyled">
+                {% for apartment in apartments %}
+                    <li href="/apartment/{{ apartment.id }}">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <a href="/apartment/{{ apartment.id }}" class="thumbnail">
+                                    <img src="/media/{{ apartment.apartmentimg_set.first.img }}"
+                                         alt="{{ apartment.name }}">
+                                </a>
+                            </div>
+                            <div class="col-md-7">
+                                <div class="show-detail house-about">
+                                    <h3 class="house-title">
+                                        <a title="{{ apartment.name }}"
+                                           target="_blank"
+                                           href="/apartment/{{ apartment.id }}">{{ apartment.name }}</a>
+                                    </h3>
+                                    <p class="clearfix">
+                                            <span><a
+                                                    href="/{{ apartment.garden_id.location_id.id }}/">{{ apartment.garden_id.location_id.province }}</a></span>
+                                        <span class="flag-line"></span>
+                                        <span>{{ apartment.garden_id.name }}</span>
+                                        <span class="flag-line"></span>
+                                        <span>{{ apartment.room }}室{{ apartment.hall }}厅{{ apartment.bathroom }}卫</span>
+                                        <span class="flag-line"></span>
+                                    </p>
+                                    <p class="clearfix">
+                                        <span>大小：</span>
+                                        <span>{{ apartment.size }}平米</span>
+                                        <span class="flag-line"></span>
+                                        <span>朝向：</span>
+                                        <span>{{ apartment.get_str_forward }}</span>
+                                        <span class="flag-line"></span>
+                                        <span>{{ apartment.get_str_decoration }}</span>
+                                    </p>
+
+
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <br>
+                                <p class="price"><span class="h2">{{ apartment.price }}</span><span
+                                        class="sale-unit">元/月</span></p>
+                                <br>
+                            </div>
+                        </div>
+                        <hr>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <nav aria-label="Page navigation">
+            <ul class="pager">
+                {% if pages.has_previous %}
+                    <li class="previous">
+                        <a href="?order={{ order }}&page={{ page_sall.previous_page_number }}"
+                           aria-label="Previous"><span
+                                aria-hidden="true">&laquo;</span></a>
+                    </li>
+                {% endif %}
+                {% for pg in pages.paginator.page_range %}
+                    {% if pages.number == pg %}
+                        <li class="disabled"><a href="?order={{ order }}&page={{ pg }}">{{ pg }}</a></li>
+                    {% else %}
+                        <li class="active"><a href="?order={{ order }}&page={{ pg }}">{{ pg }}</a></li>
+                    {% endif %}
+                {% endfor %}
+                {% if pages.has_next %}
+                    <li class="next">
+                        <a href="?order={{ order }}&page={{ pages.next_page_number }}" aria-label="Next"><span
+                                aria-hidden="true">&raquo;</span></a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+{% endblock %}

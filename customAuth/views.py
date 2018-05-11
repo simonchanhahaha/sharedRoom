@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from customAuth.models import Users_profile, Location, Avatar
+from order.models import Star,Article
 from django.http import HttpResponse
 import os
 
@@ -20,11 +21,14 @@ def userLogin(request):
     username = request.POST['username']
     password = request.POST['password']
     user = authenticate(username=username, password=password)
-    if user is not None:
+    url = request.META.get('HTTP_REFERER','/')
+    if user.is_authenticated():
         login(request, user)
         print('success')
 
-    return redirect('/')
+        return redirect(url)
+    else:
+        return redirect('/auth/showlogin')
 
 
 def showRegister(request):
@@ -49,23 +53,22 @@ def register(request):
         return redirect('/auth/register', data)
 
     user = User.objects.create_user(username=username, email=email, password=password)
-    user.first_name = request.POST.get('first-name')
-    user.last_name = request.POST.get('last-name')
+    user.first_name = request.POST.get('first-name','')
+    user.last_name = request.POST.get('last-name','')
     user.save()
     login_user = authenticate(username=username, password=password)
     login(request, login_user)
     data = {
-        'title': '首页',
+        'title': '填写个人信息',
         'status': 'success',
         'user': login_user
     }
-    return redirect('/auth/showsetprofile/')
+    return redirect('/auth/showsetprofile/',data)
 
 
 def userLogout(request):
     logout(request)
     return redirect('/')
-
 
 
 @login_required
@@ -76,62 +79,62 @@ def showSetProfile(request):
 @login_required
 def setProfile(request):
     user = request.user
-    phone = request.POST['phone']
-    location = request.POST['location']
+    phone = request.POST.get('phone','')
+    location_id = request.POST.get('location','')
+    location = Location.objects.filter(id=location_id).first()
+    wechat = request.POST.get('wechat','')
 
     profile = Users_profile()
     profile.user_id = user
     profile.phone = phone
-    wechat = request.POST['wechat']
+    profile.wechat = wechat
 
-    if wechat is not None:
-        profile.wechat = wechat
-    else:
-        profile.wechat = None
+    profile.gender = request.POST.get('gender','')
+    profile.location= location
 
-    profile.gender = request.POST['gender']
-    profile.location_id = location
+    avatar = request.FILES.get('avatar','')
+    result = set_avatar(avatar,request.user)
     profile.save()
 
-    # '''
-    # set avatar
-    # '''
-    set_avatar(request)
     return redirect('/')
 
-
+@login_required
 def showProfile(request, user_id):
-    user = User.objects.get(id=user_id)
-    data = {
-        'title': user.username,
-        'status': "success",
-        'user': user
-    }
-    return render(request, 'authTemplate/show_profile.html', context=data)
+    if str(request.user.id) != str(user_id):
+        return redirect('/')
+    else:
+        user = request.user
+        star_lists = Star.objects.filter(user=user)
+        apartments = []
+        for star in star_lists:
+            apartments.append(star.apartment)
+
+        articles = request.user.article_set.all()
+        data = {
+            'title': user.username,
+            'status': "success",
+            'user': user,
+            'star_apartments':apartments,
+            'articles':articles
+        }
+        return render(request, 'authTemplate/show_profile.html', context=data)
 
 
 def avatar(request):
-    return render(request,'authTemplate/avatar.html')
+    return render(request, 'authTemplate/avatar.html')
 
-def set_avatar(request):
-    if request.FILES.get('avatar') is not None:
-        try:
-            avatar = request.user.avatar
-            avatar.version += 1
-        except:
-            avatar = Avatar()
-            avatar.user_id = request.user
-        avatar.img = request.FILES['avatar']
-        avatar.path = 'avatar/' + str(request.user.id) + '/' + request.FILES['avatar'].name
+
+def set_avatar(get_avatar,user):
+    if get_avatar != '':
+        avatar = Avatar()
+        avatar.user_id = user
+        avatar.img = avatar
+        avatar.path = 'avatar/' + str(user.id) + '/' + get_avatar.name
         avatar.save()
-        return HttpResponse(avatar.path)
     else:
-        if request.user.avatar is not None:
-            return redirect('auth/profile/'+str(request.user.id))
-        else:
-            avatar = Avatar()
-            avatar.user_id = request.user
-            avatar.img = 'avatar/default.png'
-            avatar.path = 'avatar/default.png'
-            avatar.save()
-            return HttpResponse(avatar.path)
+        avatar = Avatar()
+        avatar.user_id = user
+        avatar.img = 'avatar/default.png'
+        avatar.path = 'avatar/default.png'
+        avatar.save()
+    return avatar

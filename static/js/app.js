@@ -18,16 +18,16 @@ function initActionListeners() {
                     // Animate
                     if (!$(button).hasClass('starred')) {
                         $(button).html('<i class="fa fa-star"></i>&nbsp;取消收藏');
-                        $(button).attr('count', Math.abs($(button).attr('count')) + 1);
+                        // $(button).attr('count', Math.abs($(button).attr('count')) + 1);
                     } else {
                         $(button).html('<i class="fa fa-star-o"></i>&nbsp;收藏');
-                        $(button).attr('count', Math.abs($(button).attr('count')) - 1);
+                        // $(button).attr('count', Math.abs($(button).attr('count')) - 1);
                     }
                     $(button).toggleClass('starred');
                 }
             },
             error(er) {
-                swal("Error!", er.responseText, "error");
+                alert("Error!", er.responseText, "error");
             }
         });
     });

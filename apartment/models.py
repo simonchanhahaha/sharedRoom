@@ -18,7 +18,8 @@ class Garden(models.Model):
     location_id = models.ForeignKey(Location, db_column='location_id')
     company = models.CharField(max_length=30)
 
-
+    def __str__(self):
+        return self.name
 
 
 class Apartment(models.Model):
@@ -42,6 +43,10 @@ class Apartment(models.Model):
     description = models.TextField()
     created_time = models.DateTimeField(auto_now=True)
     is_rent = models.BooleanField(default=0)
+
+
+    def __str__(self):
+        return self.name
 
     def get_str_decoration(self):
         '''
@@ -92,6 +97,7 @@ class Apartment(models.Model):
             forward = '不知道房屋朝向'
 
         return forward
+
 
 def apartment_img_path(instance, filename):
     return '/'.join(['apartment', str(instance.apartment.id), filename])

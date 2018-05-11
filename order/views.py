@@ -3,77 +3,12 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db import transaction
 from apartment.models import Apartment
-from order.models import Order, Star
+from order.models import Order, Star,Article
 import datetime
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-
-@login_required
-def order(request):
-    # 查询用户对象
-    user = request.user
-    # 根据提交查询购物车信息
-    # 构造传递到模板中的数据
-    context = {'title': '提交订单',
-               'page_name': 1,
-               'user': user,
-               }
-    return render(request, 'df_order/order.html', context)
-
-
-'''
-事务：一旦操作失败则全部回退
-1、创建订单对象
-2、判断商品的库存
-3、创建详单对象
-4、修改商品库存
-5、删除购物车
-'''
-
-
-@transaction.atomic
-@login_required
-def order_handle(request):
-    tran_id = transaction.savepoint()
-    apartment_id = request.POST('apartment_id')
-    try:
-        apartment = Apartment.objects.filter(id=apartment_id).first()
-        if apartment.is_rent is False:
-            order = Order()
-            user = request.user
-            now = datetime.now()
-            order.id = '%s%d' % (now.strftime('%Y%m%d%H%M%S'), user.id)
-            order.consumer = user
-            # print order.oid
-            order.created_date = now
-            order.apartment = apartment
-            order.save()
-
-        else:
-            transaction.savepoint_rollback(tran_id)
-            return redirect('/apartment/' + str(apartment_id))
-            # return HttpResponse('no')
-        # 保存总价
-        order.save()
-        transaction.savepoint_commit(tran_id)
-    except Exception as e:
-        print('================%s' % e)
-        transaction.savepoint_rollback(tran_id)
-
-    # return HttpResponse('ok')
-    return redirect('/order/')
-
-
-@login_required
-def check_order(request, order_id):
-    order = Order.objects.filter(id=order_id).first()
-    if order.is_check is False:
-        tran_id = transaction.savepoint()
-        order.is_check = True
-        order.save()
-        transaction.savepoint_commit(tran_id)
-    else:
-        return redirect('')
+from customAuth.models import Location
+from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
 
 @csrf_exempt
 @login_required
@@ -96,3 +31,110 @@ def star(request,apartment_id):
     return JsonResponse({
         'status':'success'
     })
+
+
+@login_required
+def article(request):
+    context = {
+        'title':'我想合租'
+    }
+    return render(request,'set_article.html',context=context)
+
+
+def return_page_obj(page, obj):
+    paginator = Paginator(obj, 20)
+
+    if page:
+        return paginator.page(page).object_list
+    else:
+        return paginator.page(1).object_list
+
+
+def return_pages(page, obj):
+    paginator = Paginator(obj, 20)
+
+    try:
+        pages = paginator.page(page)
+        return pages
+    except PageNotAnInteger:
+        pages = paginator.page(1)
+        return pages
+    except EmptyPage:
+        pages = paginator.page(paginator.num_pages)
+        return pages
+
+
+
+def show_articles(request):
+    articles_all = Article.objects.all()
+    page = request.GET.get('page')
+    articles = return_page_obj(page, articles_all)
+    pages= return_pages(page, articles_all)
+    context={
+        'title':'合租列表',
+        'articles':articles,
+        'pages':pages,
+    }
+
+    return render(request,'articles.html',context=context)
+
+def show_article(request,id):
+    article=Article.objects.filter(id=id).first()
+    context={
+        'title':article.title,
+        'article':article
+    }
+    return render(request,'article.html',context=context)
+
+def show_edit_article(request,id):
+    article = Article.objects.filter(id=id).first()
+    context={
+        'title':'修改-'+article.title,
+        'article':article,
+        'reset':True
+    }
+    return render(request,'set_article.html',context=context)
+
+def edit_article(request,id):
+    article=Article.objects.filter(id=id).first()
+    title = request.POST.get('title', '')
+    location_id = request.POST.get('location','')
+
+    requirement = request.POST.get('requirement','').strip()
+    if title != '':
+        article.title=title
+    if location_id !='':
+        location = Location.objects.filter(id=location_id).first()
+        article.location=location
+    if requirement!='':
+        article.requirement=requirement
+
+    article.save()
+
+    return redirect('/article/'+str(article.id))
+
+
+@login_required
+def handle_article(request):
+    article = Article()
+    author = request.user
+    location_id = request.POST['location']
+    location = Location.objects.filter(id=location_id).first()
+    title = request.POST['title']
+    requirement = request.POST['requirement'].strip()
+    article.title = title
+    article.location=location
+    article.author=author
+    article.requirement=requirement.strip()
+    article.save()
+    return redirect('/article/'+str(article.id))
+
+@login_required
+def delete_article(request,id):
+    article = Article.objects.filter(id=id).first()
+    article.delete()
+    # return JsonResponse({
+    #     'status':'success'
+    # })
+
+    return redirect('/auth/profile/'+str(request.user.id))

@@ -9,6 +9,8 @@ class Location(models.Model):
     class Meta():
         db_table='Location'
 
+    def __str__(self):
+        return self.pid.province+'-'+self.province
 
 class Users_profile(models.Model):
     user_id = models.OneToOneField(User,db_column='user_id')

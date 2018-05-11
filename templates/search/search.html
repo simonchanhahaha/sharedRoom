@@ -1,0 +1,48 @@
+{% extends 'app.html' %}
+
+{% block content %}
+    <div class="container">
+        {% if query %}
+            <h3>搜索结果如下：</h3>
+            <div class="list-group">
+                {% for result in page.object_list %}
+                    <a class="list-group-item" href="/garden/{{ result.object.id }}">
+                    <span class="row">
+                        <div class="col-md-9">
+                            <h3>
+                                {{ result.object.name }}
+                            </h3>
+                            <p>该小区位于{{ result.object.location_id.pid.province }}-{{ result.object.location_id.province }}，物业管理公司为{{ result.object.company }}</p>
+                        </div>
+                        <div class="col-md-3">
+                            <h3>
+                                <small>该小区共有</small>
+                                {{ result.object.apartment_set.all.count }}
+                                <small>套房源</small>
+                            </h3>
+                        </div>
+                    </span>
+
+                    </a>
+                    <hr>
+                    {% empty %}
+                    <p>啥也没找到</p>
+                {% endfor %}
+
+            </div>
+
+
+            {% if page.has_previous or page.has_next %}
+                <div>
+                    {% if page.has_previous %}
+                        <a href="?q={{ query }}&amp;page={{ page.previous_page_number }}">{% endif %}&laquo; 上一页
+                    {% if page.has_previous %}</a>{% endif %}
+                    |
+                    {% if page.has_next %}<a href="?q={{ query }}&amp;page={{ page.next_page_number }}">{% endif %}
+                    下一页 &raquo;{% if page.has_next %}</a>{% endif %}
+                </div>
+            {% endif %}
+        {% endif %}
+
+    </div>
+{% endblock %}

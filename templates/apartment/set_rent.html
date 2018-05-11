@@ -18,39 +18,89 @@
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
-                <div class="panel-heading">填写用户信息</div>
+                <div class="panel-heading">填写出租信息</div>
                 <div class="panel-body">
-                    <form class="form-horizontal" role="form" method="POST" action="/apartment/setrent/" enctype="multipart/form-data"
+                    <form class="form-horizontal" role="form" method="POST"
+                            {% if reset %}
+                          action="/apartment/{{ apartment.id }}/update"
+                            {% else %}
+                          action="/apartment/rent/"
+                            {% endif %}
+
+                          enctype="multipart/form-data"
                           accept-charset="utf-8">
                         {% csrf_token %}
                         <div class="form-group">
                             <label class="col-md-4 control-label">住宅标题</label>
-                            <div class="col-md-6">
-                                <input type="text" class="form-control" name="apartment_name">
-                            </div>
+                            {% if reset %}
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" name="apartment_name"
+                                           value="{{ apartment.name }}">
+                                </div>
+                            {% else %}
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" name="apartment_name">
+                                </div>
+                            {% endif %}
+
                         </div>
                         <div class="form-group">
                             <label class="col-md-4 control-label">小区</label>
-                            <div class="col-md-6">
-                                <input type="text" class="form-control" name="garden_name">
-                            </div>
+                            {% if reset %}
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" name="garden_name"
+                                           value="{{ apartment.garden_id.name }}">
+                                </div>
+                            {% else %}
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" name="garden_name">
+                                </div>
+                            {% endif %}
+
                         </div>
                         <div class="form-group">
                             <label class="col-md-4 control-label">物业管理公司</label>
-                            <div class="col-md-6">
-                                <input type="text" class="form-control" name="company" placeholder="如果没有物业管理公司，则不填">
-                            </div>
+                            {% if reset %}
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" name="company" placeholder="如果没有物业管理公司，则不填"
+                                           value="{{ apartment.garden_id.company }}">
+                                </div>
+                            {% else %}
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" name="company" placeholder="如果没有物业管理公司，则不填">
+                                </div>
+                            {% endif %}
                         </div>
                         <div class="form-group">
                             <label for="" class="col-md-4 control-label">租房类型</label>
-                            <div class="col-md-6">
-                                <label class="radio-inline">
-                                    <input type="radio"  name="rent_type" value="0"> 合租
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio"  name="rent_type" value="1" checked> 整租
-                                </label>
-                            </div>
+                            {% if reset %}
+                                <div class="col-md-6">
+                                    <label class="radio-inline">
+                                        <input type="radio" name="rent_type" value="0"
+                                                {% if not apartment.rent_type %}
+                                               checked
+                                                {% endif %}
+                                        > 合租
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="rent_type" value="1"
+                                                {% if apartment.rent_type %}
+                                               checked
+                                                {% endif %}
+                                        > 整租
+                                    </label>
+                                </div>
+                            {% else %}
+                                <div class="col-md-6">
+                                    <label class="radio-inline">
+                                        <input type="radio" name="rent_type" value="0"> 合租
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="rent_type" value="1" checked> 整租
+                                    </label>
+                                </div>
+                            {% endif %}
+
                         </div>
                         <div class="form-group">
                             <label class="col-md-4 control-label">地区</label>
@@ -69,12 +119,23 @@
                         </div>
                         <div class="form-group">
                             <label class="col-md-4 control-label">总面积</label>
-                            <div class="col-md-6">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" name="size" aria-describedby="basic-addon2">
-                                    <span class="input-group-addon" id="basic-addon2">平米</span>
+                            {% if reset %}
+                                <div class="col-md-6">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="size"
+                                               aria-describedby="basic-addon2" value="{{ apartment.size }}">
+                                        <span class="input-group-addon" id="basic-addon2">平米</span>
+                                    </div>
                                 </div>
-                            </div>
+                            {% else %}
+                                <div class="col-md-6">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="size"
+                                               aria-describedby="basic-addon2">
+                                        <span class="input-group-addon" id="basic-addon2">平米</span>
+                                    </div>
+                                </div>
+                            {% endif %}
                         </div>
 
 
@@ -82,12 +143,24 @@
                             <label class="col-md-4 control-label">户型</label>
                             <div class="col-md-6">
                                 <div class="input-group">
-                                    <input type="text" class="form-control" name="room" aria-describedby="basic-addon2">
+                                    <input type="text" class="form-control" name="room" aria-describedby="basic-addon2"
+                                            {% if reset %}
+                                           value="{{ apartment.room }}"
+                                            {% endif %}
+                                    >
                                     <span class="input-group-addon" id="basic-addon2">房</span>
-                                    <input type="text" class="form-control" name="hall" aria-describedby="basic-addon2">
+                                    <input type="text" class="form-control" name="hall" aria-describedby="basic-addon2"
+                                            {% if reset %}
+                                           value="{{ apartment.hall }}"
+                                            {% endif %}
+                                    >
                                     <span class="input-group-addon" id="basic-addon2">厅</span>
                                     <input type="text" class="form-control" name="bathroom"
-                                           aria-describedby="basic-addon2">
+                                           aria-describedby="basic-addon2"
+                                            {% if reset %}
+                                           value="{{ apartment.bathroom }}"
+                                            {% endif %}
+                                    >
                                     <span class="input-group-addon" id="basic-addon2">卫</span>
                                 </div>
                             </div>
@@ -111,17 +184,29 @@
                         <div class="form-group">
                             <label class="col-md-4 control-label">楼层</label>
                             <div class="col-md-6">
-                                <input type="text" class="form-control" name="floor">
+                                <input type="text" class="form-control" name="floor"
+                                        {% if reset %}
+                                       value="{{ apartment.floor }}"
+                                        {% endif %}
+                                >
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="" class="col-md-4 control-label">家具</label>
                             <div class="col-md-6">
                                 <label class="radio-inline">
-                                    <input type="radio"  name="furniture" value="0"> 无
+                                    <input type="radio" name="furniture" value="0"
+                                            {% if not apartment.has_furniture %}
+                                           checked
+                                            {% endif %}
+                                    > 无
                                 </label>
                                 <label class="radio-inline">
-                                    <input type="radio"  name="furniture" value="1"> 有
+                                    <input type="radio" name="furniture" value="1"
+                                            {% if apartment.has_furniture %}
+                                           checked
+                                            {% endif %}
+                                    > 有
                                 </label>
                             </div>
                         </div>
@@ -144,7 +229,11 @@
                             <div class="col-md-6">
                                 <div class="input-group">
                                     <input type="text" class="form-control" name="price"
-                                           aria-describedby="basic-addon2">
+                                           aria-describedby="basic-addon2"
+                                            {% if reset %}
+                                           value="{{ apartment.price }}"
+                                            {% endif %}
+                                    >
                                     <span class="input-group-addon" id="basic-addon2">元/月</span>
                                 </div>
                             </div>
@@ -167,20 +256,29 @@
                         <div class="form-group">
                             <label for="" class="col-md-4 control-label">小区描述</label>
                             <div class="col-md-6">
-                                <textarea class="form-control" name="description" rows="3"></textarea>
+                                <textarea class="form-control" name="description" rows="3">
+                                   {% if reset %}
+                                       {{ apartment.description }}
+                                   {% endif %}
+                                </textarea>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label class="col-md-4 control-label">图片</label>
                             <div class="col-md-6">
-                                <input type="file" class="file-upload" name="img" multiple="multiple">
+                                <input type="file" class="file-upload" name="img">
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-md-6 col-md-offset-4">
                                 <button type="submit" class="btn btn-primary">
-                                    <i class="fa fa-btn fa-user"></i>提交
+                                    <i class="fa fa-btn fa-user"></i>
+                                    {% if reset %}
+                                        更新
+                                    {% else %}
+                                        提交
+                                    {% endif %}
                                 </button>
                             </div>
                         </div>

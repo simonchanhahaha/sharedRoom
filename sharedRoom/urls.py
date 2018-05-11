@@ -19,18 +19,22 @@ from django.conf import settings
 from django.contrib import admin
 
 urlpatterns = [
-    url(r'^admin/', include(admin.site.urls)),
-    url(r'^auth/', include('customAuth.urls')),
-    url(r'^apartment/', include('apartment.urls')),
-    url(r'^city/(\d+)/', 'apartment.views.city'),
-    url(r'^(\d+)/$', 'apartment.views.show_city'),
-    url(r'^garden/(\d+)/$', 'apartment.views.show_garden'),
-    # url(r'^$', 'apartment.views.showIndex'),
-    url(r'^$', 'apartment.views.index'),
-    url(r'^avatar/', 'customAuth.views.avatar'),
-    url(r'^setavatar/', 'customAuth.views.set_avatar'),
-    url(r'^test/$','apartment.views.test'),
-    url(r'list/all','apartment.views.index'),
-    url(r'list/hezu','apartment.views.show_hezu'),
-    url(r'list/zhengzu','apartment.views.show_zhengzu'),
-]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+                  url(r'^$', 'apartment.views.index'),
+                  url(r'search/',include('haystack.urls')),
+                  url(r'^admin/', include(admin.site.urls)),
+                  url(r'^auth/', include('customAuth.urls')),
+                  url(r'^apartment/', include('apartment.urls')),
+                  url(r'^city/(\d+)/', 'apartment.views.city'),
+                  url(r'^(\d+)/$', 'apartment.views.show_city'),
+                  url(r'^garden/(\d+)/$', 'apartment.views.show_garden'),
+                  url(r'^avatar/', 'customAuth.views.avatar'),
+                  url(r'^setavatar/', 'customAuth.views.set_avatar'),
+                  url(r'^writearticle/$', 'order.views.article'),
+                  url(r'^articles/$', 'order.views.show_articles'),
+                  url(r'^article/(\d+)/$', 'order.views.show_article'),
+                  url(r'^article/(\d+)/delete/$', 'order.views.delete_article'),
+                  url(r'^article/(\d+)/showedit/$', 'order.views.show_edit_article'),
+                  url(r'^article/(\d+)/edit/$', 'order.views.edit_article'),
+                  url(r'^publish/$', 'order.views.handle_article'),
+
+              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -53,7 +53,7 @@ class AnjukeSpider(CrawlSpider):
 
             apartment = ApartmentItem()
             apartment['name'] = response.xpath("//h3[@class='house-title']/text()").extract()[0]
-            apartment['rent_type'] = True
+            apartment['rent_type'] = 1
             apartment['size'] = house_info.re('(\d+)平方米')[0]
 
             structure = house_info.re("(\d+)室(\d+)厅(\d+)卫")
@@ -62,7 +62,7 @@ class AnjukeSpider(CrawlSpider):
             apartment['bathroom'] = structure[2]
 
             apartment['floor'] = house_info.re("共(\d+)层")[0]
-            apartment['has_furniture'] = True
+            apartment['has_furniture'] = 1
 
             decor = response.xpath("//ul[1]/li[6]/span[2]/text()").extract()[0]
             if decor == '毛坯':
@@ -137,8 +137,8 @@ class AnjukeSpider(CrawlSpider):
                 description += d + '\n'
             apartment['description'] = description
 
-            apartment['user_id'] = User.objects.filter(id=1).first()
-            apartment['is_rent'] = False
+            apartment['user_id'] = User.objects.filter(id=4).first()
+            apartment['is_rent'] = 0
 
 
 

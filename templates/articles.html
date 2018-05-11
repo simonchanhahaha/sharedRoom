@@ -1,0 +1,38 @@
+{% extends 'app.html' %}
+{% block content %}
+    <div class="container">
+        <div class="panel panel-warning">
+            <div class="panel-heading">合租请求列表</div>
+
+            <div class="list-group">
+                {% for article in articles %}
+                    <a class="list-group-item" data-id="{{ article.id }}" href="/article/{{ article.id }}">
+                        {{ article.title }}
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+        <nav aria-label="Page navigation">
+            <ul class=" pager">
+                {% if pages.has_previous %}
+                    <li class="previous">
+                        <a href="?page={{ page_sall.previous_page_number }}" aria-label="Previous"><span
+                                aria-hidden="true">&laquo;</span></a>
+                    </li>
+                {% endif %}
+                {% for pg in pages.paginator.page_range %}
+                    {% if pages.number == pg %}
+                        <li class="active"><a href="?page={{ pg }}">{{ pg }}</a></li>
+                    {% else %}
+                        <li><a href="?page={{ pg }}">{{ pg }}</a></li>
+                    {% endif %}
+                {% endfor %}
+                {% if pages.has_next %}
+                    <li class="next">
+                        <a href="?page={{ pages.next_page_number }}" aria-label="Next"><span
+                                aria-hidden="true">&raquo;</span></a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+{% endblock %}
