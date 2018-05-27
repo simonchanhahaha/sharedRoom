@@ -8,14 +8,6 @@ class Star(models.Model):
     apartment = models.ForeignKey(Apartment,db_column='apartment_id')
 
 
-class Order(models.Model):
-    id = models.CharField(max_length=20, primary_key=True)
-    consumer = models.ForeignKey(User)
-    apartment = models.ForeignKey(Apartment)
-    is_check = models.BooleanField(default=False)
-    created_date = models.DateTimeField(auto_now_add=True)
-
-
 class Article(models.Model):
     author = models.ForeignKey(User)
     title = models.CharField(max_length=40,null=False,blank=False)

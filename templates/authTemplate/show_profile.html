@@ -26,7 +26,7 @@
                                 <a href="/article/{{ article.id }}/showedit/"><span
                                         class="btn btn-success">修改</span></a>
                                 <a class="btn btn-danger"
-                                   data-id="{{ article.id }}" href="/article/{{ article.id }}/delete/" >删除
+                                   data-id="{{ article.id }}" href="/article/{{ article.id }}/delete/">删除
                                 </a>
                             </li>
                         {% endfor %}
@@ -41,8 +41,6 @@
                         {% for apartment in star_apartments %}
                             <li class="list-group-item" data-id="{{ apartment.id }}">
                                 <a href="/apartment/{{ apartment.id }}">{{ apartment.name }}</a>
-                                <a href="/apartment/{{ apartment.id }}/showupdate/"><span
-                                        class="btn btn-success">修改</span></a>
                                 <div id="star" class="btn star-button starred"
                                      data-id="{{ apartment.id }}">
                                     <i class="fa fa-star"></i>&nbsp;取消收藏
@@ -51,7 +49,22 @@
                         {% endfor %}
                     </ul>
                 </div>
+                <div class="panel panel-warning">
+                    <div class="panel-heading">你的房源</div>
 
+                    <ul class="list-group">
+                        {% for apartment in apartments %}
+                            <li class="list-group-item" data-id="{{ apartment.id }}">
+                                <a href="/apartment/{{ apartment.id }}">{{ apartment.name }}</a>
+                                <a href="/apartment/{{ apartment.id }}/showupdate/"><span
+                                        class="btn btn-success">修改</span></a>
+                                <a class="btn btn-danger"
+                                   data-id="{{ apartment.id }}" href="/apartment/{{ apartment.id }}/delete/">删除
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
             </div>
         </div>
     </div>

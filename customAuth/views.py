@@ -5,11 +5,12 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from customAuth.models import Users_profile, Location, Avatar
 from order.models import Star,Article
-from django.http import HttpResponse
+from apartment.models import Apartment
 import os
 
 
 def showLogin(request):
+    request.session['last_url'] = request.META.get('HTTP_REFERER','/')
     data = {
         'title': '用户登录',
         'status': 'success',
@@ -21,7 +22,8 @@ def userLogin(request):
     username = request.POST['username']
     password = request.POST['password']
     user = authenticate(username=username, password=password)
-    url = request.META.get('HTTP_REFERER','/')
+    url = request.session.get('last_url','/')
+    del request.session['last_url']
     if user.is_authenticated():
         login(request, user)
         print('success')
@@ -67,8 +69,9 @@ def register(request):
 
 
 def userLogout(request):
+    url = request.META.get('HTTP_REFERER','/')
     logout(request)
-    return redirect('/')
+    return redirect(url)
 
 
 @login_required
@@ -105,17 +108,19 @@ def showProfile(request, user_id):
     else:
         user = request.user
         star_lists = Star.objects.filter(user=user)
-        apartments = []
+        star_apartments = []
         for star in star_lists:
-            apartments.append(star.apartment)
+            star_apartments.append(star.apartment)
 
+        apartments = Apartment.objects.filter(user_id=user)
         articles = request.user.article_set.all()
         data = {
             'title': user.username,
             'status': "success",
             'user': user,
-            'star_apartments':apartments,
-            'articles':articles
+            'star_apartments':star_apartments,
+            'articles':articles,
+            'apartments':apartments
         }
         return render(request, 'authTemplate/show_profile.html', context=data)
 

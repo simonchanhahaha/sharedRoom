@@ -87,7 +87,7 @@
                         </ul>
                     </li>
 
-                    <li><a href="/apartment/rent/">我要出租</a></li>
+                    <li><a href="/apartment/showrent/">我要出租</a></li>
                     <li><a href="/writearticle/">寻找室友</a></li>
                     <li role="presentation" class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button"
@@ -129,10 +129,10 @@
                 <ul class="list-unstyled">
                     <li><a href="/apartment/hezu">我要合租</a></li>
                     <li><a href="/apartment/zhengzu">我要整租</a></li>
-                    {% if request.user.is_authenticated %}
+
                         <li><a href="/apartment/showrent/">我要出租</a></li>
-                    {% endif %}
-                    <li><a href="">寻找室友</a></li>
+
+                    <li><a href="/articles">寻找室友</a></li>
                 </ul>
             </div>
             <div class="col-md-3 col-sm-12"><h4>用户中心</h4>

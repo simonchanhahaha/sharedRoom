@@ -138,7 +138,6 @@ def show_city(request, id):
         apartment_zhengzu = return_page_apartment(page, apartments_zhengzu)
         pages_zhengzu = return_pages(page, apartments_zhengzu)
 
-
         data = {
             'title1': '列表页-',
             'status': 'success',
@@ -157,6 +156,7 @@ def show_city(request, id):
     else:
         return redirect('/')
 
+
 def city(request, id):
     city = Location.objects.filter(pid=id)
     list = []
@@ -169,20 +169,22 @@ def city(request, id):
     return JsonResponse({'data': list})
 
 
-@login_required
 def show_rent(request):
+    if not request.user.is_authenticated():
+        return redirect('/auth/showlogin/')
+
     context = {
-        'title':'我要出租'
+        'title': '我要出租'
     }
-    return render(request, 'apartment/set_rent.html',context=context)
+    return render(request, 'apartment/set_rent.html', context=context)
 
 
 @login_required
 def rent_handle(request):
     user = request.user
-    location_id = request.POST.get('district','')
+    location_id = request.POST.get('district', '')
     location = Location.objects.filter(id=location_id).first()
-    garden_name = request.POST.get('garden_name','')
+    garden_name = request.POST.get('garden_name', '')
     garden = Garden.objects.filter(name__contains=garden_name)
     if len(garden) != 0:
         garden_id = garden.first()
@@ -190,33 +192,35 @@ def rent_handle(request):
         new_garden = Garden()
         new_garden.name = garden_name
         new_garden.location_id = location
-        new_garden.company = request.POST.get('company','')
-        new_garden.description = request.POST.get('description','')
+        new_garden.company = request.POST.get('company', '')
+        new_garden.description = request.POST.get('description', '')
         new_garden.save()
         garden_id = new_garden
-    rent_type = request.POST.get('rent_type','')
+    rent_type = request.POST.get('rent_type', '')
     apartment = Apartment()
     if rent_type == '1':
         apartment.rent_type = 1
     else:
         apartment.rent_type = 0
+    apartment.name = request.POST.get('apartment_name', '')
     apartment.garden_id = garden_id
-    apartment.size = request.POST.get('size','')
-    apartment.floor = request.POST.get('floor','')
-    apartment.room = request.POST.get('room','')
-    apartment.hall = request.POST.get('hall','')
-    apartment.bathroom = request.POST.get('bathroom','')
-    apartment.forward = request.POST.get('forward','')
-    apartment.has_furniture = request.POST.get('furniture','')
-    apartment.decoration_type = request.POST.get('decoration_type','')
-    apartment.price = request.POST.get('price','')
-    apartment.payment_type = request.POST.get('payment_type','')
-    apartment.description = request.POST.get('description','').strip()
+    apartment.size = request.POST.get('size', '')
+    apartment.floor = request.POST.get('floor', '')
+    apartment.room = request.POST.get('room', '')
+    apartment.hall = request.POST.get('hall', '')
+    apartment.bathroom = request.POST.get('bathroom', '')
+    apartment.forward = request.POST.get('forward', '')
+    apartment.has_furniture = request.POST.get('furniture', '')
+    apartment.decoration_type = request.POST.get('decoration_type', '')
+    apartment.price = request.POST.get('price', '')
+    apartment.payment_type = request.POST.get('payment_type', '')
+    apartment.description = request.POST.get('description', '').strip()
     apartment.user_id = user
     apartment.save()
     a_img = ApartmentImg()
-    if request.FILES['img'] =='':
-        a_img.img = request.FILES.get('img','')
+    img = request.FILES.get('img', '')
+    if img != '':
+        a_img.img = img
     else:
         a_img.img = 'apartment/default.JPG'
     a_img.apartment = apartment
@@ -226,69 +230,77 @@ def rent_handle(request):
 
 
 @login_required
-def show_update(request,id):
+def show_update(request, id):
     apartment = Apartment.objects.filter(id=id).first()
     context = {
-        'title':'修改',
-        'reset':True,
-        'apartment':apartment
+        'title': '修改',
+        'reset': True,
+        'apartment': apartment
     }
-    return render(request,'apartment/set_rent.html',context=context)
-
+    return render(request, 'apartment/set_rent.html', context=context)
 
 
 @login_required
-def update_handle(request,id):
+def update_handle(request, id):
     user = request.user
-    location_id = request.POST['district']
-    location = Location.objects.filter(id=location_id).first()
+    rent_type = request.POST.get('rent_type', '')
     apartment = Apartment.objects.filter(id=id).first()
-    garden_name = request.POST['garden_name']
-    garden = Garden.objects.filter(name__contains=garden_name)
-    if len(garden) != 0:
-        garden_id = garden.first()
-    else:
-        new_garden = Garden()
-        new_garden.name = garden_name
-        new_garden.location_id = location
-        new_garden.company = request.POST['company']
-        new_garden.description = request.POST['description']
-        new_garden.save()
-        garden_id = new_garden
-    rent_type = request.POST['rent_type']
-
-
-
     if rent_type == '1':
         apartment.rent_type = 1
     else:
         apartment.rent_type = 0
 
-    apartment.garden_id = garden_id
-    apartment.size = request.POST['size']
-    apartment.floor = request.POST['floor']
-    apartment.room = request.POST['room']
-    apartment.hall = request.POST['hall']
-    apartment.bathroom = request.POST['bathroom']
-    apartment.forward = request.POST['forward']
-    apartment.has_furniture = request.POST['furniture']
-    apartment.decoration_type = request.POST['decoration_type']
-    apartment.price = request.POST['price']
-    apartment.payment_type = request.POST['payment_type']
-    apartment.description=request.POST['description'].strip()
-    apartment.user_id = user
+    name = request.POST.get('apartment_name', '')
+    size = request.POST.get('size', '')
+    floor = request.POST.get('floor', '')
+    room = request.POST.get('room', '')
+    hall = request.POST.get('hall', '')
+    bathroom = request.POST.get('bathroom', '')
+    forward = request.POST.get('forward', '')
+    has_furniture = request.POST.get('furniture', '')
+    decoration_type = request.POST.get('decoration_type', '')
+    price = request.POST.get('price', '')
+    payment_type = request.POST.get('payment_type', '')
+    description = request.POST.get('description', '').strip()
+
+    if name != '':
+        apartment.name = name
+    if size != '':
+        apartment.size = size
+    if floor != '':
+        apartment.floor = floor
+    if room != '':
+        apartment.room = room
+    if hall != '':
+        apartment.hall = hall
+    if bathroom != '':
+        apartment.bathroom = bathroom
+    if forward != '':
+        apartment.forward = forward
+    if has_furniture != '':
+        apartment.has_furniture = has_furniture
+    if decoration_type != '':
+        apartment.decoration_type = decoration_type
+    if price != '':
+        apartment.price = price
+    if payment_type != '':
+        apartment.payment_type = payment_type
+    if description != '':
+        apartment.description = description
+
     apartment.save()
 
+    a_img = apartment.apartmentimg_set.first()
 
-    # return HttpResponse(request.FILES['img'])
-    if request.FILES.get('img','') !='':
-        a_img = ApartmentImg.objects.filter(apartment_id=apartment).first()
-        a_img.img = request.FILES['img']
-        a_img.save()
-    # a_img.apartment = apartment
-
+    img = request.FILES.get('img', '')
+    if img != '':
+        a_img.img = img
+    else:
+        a_img.img = 'apartment/default.JPG'
+    a_img.save()
     address = '/apartment/' + str(apartment.id) + '/'
     return redirect(address)
+
 
 def show_detail(request, id):
     apartment = Apartment.objects.filter(id=id).first()
@@ -422,7 +434,7 @@ def get_str_payment(payment_type):
 
 def show_garden(request, id):
     garden = Garden.objects.filter(id=id).first()
-    if garden!='':
+    if garden != '':
         apartments_all = garden.apartment_set.filter(is_rent=False)
         apartments_hezu = []
         apartments_zhengzu = []
@@ -432,7 +444,6 @@ def show_garden(request, id):
                 apartments_zhengzu.append(apartment)
             else:
                 apartments_hezu.append(apartment)
-
 
         count_all = len(apartments_all)
         count_hezu = len(apartments_hezu)
@@ -466,20 +477,22 @@ def show_garden(request, id):
 
 
 def index(request):
-    return render(request,'home.html')
+    return render(request, 'home.html')
 
 
-def delete_handle(request,id):
+def delete_handle(request, id):
+    url = request.META.get('HTTP_REFERER', '/')
     apartment = Apartment.objects.filter(id=id).first()
-    apartment_img = ApartmentImg.objects.filter(apartment=apartment).first()
+    apartment_img = apartment.apartmentimg_set.first()
     apartment_img.delete()
     apartment.delete()
-    return redirect('/')
+    return redirect(url)
+
 
 def show_hezu(request):
-    order = request.GET.get('order','')
-    page = request.GET.get('page','')
-    if order =='1':
+    order = request.GET.get('order', '')
+    page = request.GET.get('page', '')
+    if order == '1':
         apartment_lists = Apartment.objects.filter(is_rent=False).filter(rent_type=False).order_by('-price').all()
     elif order == '2':
         apartment_lists = Apartment.objects.filter(is_rent=False).filter(rent_type=False).order_by('-views').all()
@@ -487,21 +500,22 @@ def show_hezu(request):
         order = '0'
         apartment_lists = Apartment.objects.filter(is_rent=False).filter(rent_type=False).all()
 
-    apartments = return_page_apartment(page,apartment_lists)
-    pages = return_pages(page,apartment_lists)
-    data={
-        'title':'我要合租',
-        'status':'success',
-        'apartments':apartments,
-        'order':order,
-        'pages':pages
+    apartments = return_page_apartment(page, apartment_lists)
+    pages = return_pages(page, apartment_lists)
+    data = {
+        'title': '我要合租',
+        'status': 'success',
+        'apartments': apartments,
+        'order': order,
+        'pages': pages
     }
-    return render(request,'apartment/list.html',data)
+    return render(request, 'apartment/list.html', data)
+
 
 def show_zhengzu(request):
-    order = request.GET.get('order','')
-    page = request.GET.get('page','')
-    if order =='1':
+    order = request.GET.get('order', '')
+    page = request.GET.get('page', '')
+    if order == '1':
         apartment_lists = Apartment.objects.filter(is_rent=False).filter(rent_type=True).order_by('-price').all()
     elif order == '2':
         apartment_lists = Apartment.objects.filter(is_rent=False).filter(rent_type=True).order_by('-views').all()
@@ -509,17 +523,16 @@ def show_zhengzu(request):
         order = '0'
         apartment_lists = Apartment.objects.filter(is_rent=False).filter(rent_type=True).all()
 
-    apartments = return_page_apartment(page,apartment_lists)
-    pages = return_pages(page,apartment_lists)
-    data={
-        'title':'我要整租',
-        'status':'success',
-        'apartments':apartments,
-        'order':order,
-        'pages':pages
+    apartments = return_page_apartment(page, apartment_lists)
+    pages = return_pages(page, apartment_lists)
+    data = {
+        'title': '我要整租',
+        'status': 'success',
+        'apartments': apartments,
+        'order': order,
+        'pages': pages
     }
-    return render(request,'apartment/list.html',data)
-
+    return render(request, 'apartment/list.html', data)
 
 
 def show_renzheng(request):
@@ -527,9 +540,11 @@ def show_renzheng(request):
     page = request.GET.get('page', '')
     user = User.objects.filter(id=4)
     if order == '1':
-        apartment_lists = Apartment.objects.filter(is_rent=False).filter(rent_type=True).filter(user_id=user).order_by('-price').all()
+        apartment_lists = Apartment.objects.filter(is_rent=False).filter(rent_type=True).filter(user_id=user).order_by(
+            '-price').all()
     elif order == '2':
-        apartment_lists = Apartment.objects.filter(is_rent=False).filter(rent_type=True).filter(user_id=user).order_by('-views').all()
+        apartment_lists = Apartment.objects.filter(is_rent=False).filter(rent_type=True).filter(user_id=user).order_by(
+            '-views').all()
     else:
         order = '0'
         apartment_lists = Apartment.objects.filter(is_rent=False).filter(rent_type=True).filter(user_id=user).all()
@@ -544,4 +559,6 @@ def show_renzheng(request):
         'pages': pages
     }
     return render(request, 'apartment/list.html', data)
-    pass
+
+
+

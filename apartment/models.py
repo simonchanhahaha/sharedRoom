@@ -3,14 +3,6 @@ from customAuth.models import Location
 from django.contrib.auth.models import User
 
 
-# Create your models here.
-
-class Subway(models.Model):
-    line = models.CharField(max_length=10,blank=False, null=False)
-    station = models.CharField(max_length=10, blank=False, null=False)
-    locaition_id = models.ForeignKey(Location,db_column='location_id')
-    class Meta:
-        db_table = 'subway'
 
 
 class Garden(models.Model):
@@ -105,8 +97,4 @@ def apartment_img_path(instance, filename):
 class ApartmentImg(models.Model):
     apartment = models.ForeignKey(Apartment)
     img = models.ImageField(upload_to=apartment_img_path)
-
-class Tag(models.Model):
-    tag = models.CharField(max_length=20)
-    apartment_id = models.ForeignKey(Apartment)
 

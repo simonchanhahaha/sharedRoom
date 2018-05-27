@@ -15,8 +15,6 @@ from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
 def star(request,apartment_id):
     user = request.user
     apartment = Apartment.objects.filter(id=apartment_id).first()
-
-
     var = Star.objects.filter(user=user).filter(apartment=apartment)
 
     if len(var) ==0:
